@@ -63,6 +63,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -74,6 +75,45 @@
                 android:id="@+id/sendingStateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/optionsButtons"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageButton
+                android:id="@+id/deleteEvent"
+                android:src="@drawable/not_ok"
+                android:layout_height="30dp"
+                android:layout_width="30dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/background"
+                android:layout_alignParentLeft="true"/>
+
+            <ImageButton
+                android:id="@+id/hideEvent"
+                android:src="@drawable/hide_event"
+                android:layout_height="30dp"
+                android:layout_width="30dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/background"
+                android:layout_alignParentLeft="true"/>
+
+            <ImageButton
+                android:id="@+id/editEvent"
+                android:src="@drawable/edit_event"
+                android:layout_height="30dp"
+                android:layout_width="30dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/background"
+                android:layout_alignParentLeft="true"/>
         </LinearLayout>
     </LinearLayout>
 
