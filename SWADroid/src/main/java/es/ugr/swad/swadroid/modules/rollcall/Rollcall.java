@@ -24,6 +24,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,9 +33,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.lang.ref.WeakReference;
 
@@ -51,125 +56,127 @@ import es.ugr.swad.swadroid.modules.courses.Courses;
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class Rollcall extends MenuExpandableListActivity implements
-                                                         SwipeRefreshLayout.OnRefreshListener {
+public class Rollcall extends MenuExpandableListActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-  /**
-   * Rollcall tag name for Logcat
-   */
-  private static final String TAG = Constants.APP_TAG + " Rollcall";
-  /**
-   * ListView of events
-   */
-  private static ListView lvEvents;
-  /**
-   * Adapter for ListView of events
-   */
-  private static EventsCursorAdapter adapter;
-  private final RefreshAdapterHandler mHandler = new RefreshAdapterHandler(this);
-  private final Runnable mRunnable = new Runnable() {
+    /**
+    * Rollcall tag name for Logcat
+    */
+    private static final String TAG = Constants.APP_TAG + " Rollcall";
+    /**
+    * ListView of events
+    */
+    private static ListView lvEvents;
+    /**
+    * Adapter for ListView of events
+    */
+    private static EventsCursorAdapter adapter;
+    private final RefreshAdapterHandler mHandler = new RefreshAdapterHandler(this);
+    private final Runnable mRunnable = new Runnable() {
     @Override
     public void run() {
-      /*
-    Database cursor for Adapter of events
-   */
-      Cursor dbCursor = dbHelper.getEventsCourseCursor(Courses.getSelectedCourseCode());
-      startManagingCursor(dbCursor);
+        /*
+        Database cursor for Adapter of events
+        */
+        Cursor dbCursor = dbHelper.getEventsCourseCursor(Courses.getSelectedCourseCode());
+        startManagingCursor(dbCursor);
 
 
                 /*
                  * If there aren't events to show, hide the events lvEvents
                  * and show the empty events message
                  */
-      if ((dbCursor == null) || (dbCursor.getCount() == 0)) {
-        Log.d(TAG, "Events list is empty");
+        if ((dbCursor == null) || (dbCursor.getCount() == 0)) {
+            Log.d(TAG, "Events list is empty");
 
-        emptyEventsTextView.setText(R.string.eventsEmptyListMsg);
-        emptyEventsTextView.setVisibility(View.VISIBLE);
+            emptyEventsTextView.setText(R.string.eventsEmptyListMsg);
+            emptyEventsTextView.setVisibility(View.VISIBLE);
 
-        lvEvents.setVisibility(View.GONE);
-      } else {
-        Log.d(TAG, "Events list is not empty");
+            lvEvents.setVisibility(View.GONE);
+        } else {
+            Log.d(TAG, "Events list is not empty");
 
-        emptyEventsTextView.setVisibility(View.GONE);
-        lvEvents.setVisibility(View.VISIBLE);
-      }
-
-      adapter = new EventsCursorAdapter(getBaseContext(), dbCursor, dbHelper);
-      lvEvents.setAdapter(adapter);
-
-      mProgressScreen.hide();
-    }
-  };
-  /**
-   * TextView for the empty events message
-   */
-  private TextView emptyEventsTextView;
-  /**
-   * Layout with "Pull to refresh" function
-   */
-  private SwipeRefreshLayout refreshLayout;
-  /**
-   * Progress screen
-   */
-  private ProgressScreen mProgressScreen;
-
-  /* (non-Javadoc)
-   * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
-   */
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.list_items_pulltorefresh);
-
-    refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_list);
-    emptyEventsTextView = (TextView) findViewById(R.id.list_item_title);
-
-    View mProgressScreenView = findViewById(R.id.progress_screen);
-    mProgressScreen = new ProgressScreen(mProgressScreenView, refreshLayout,
-            getString(R.string.loadingMsg), this);
-
-    lvEvents = (ListView) findViewById(R.id.list_pulltorefresh);
-
-    lvEvents.setOnScrollListener(new AbsListView.OnScrollListener() {
-      @Override
-      public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-      }
-
-      @Override
-      public void onScroll(AbsListView absListView, int firstVisibleItem,
-                           int visibleItemCount, int totalItemCount) {
-
-        boolean enable = true;
-        if ((lvEvents != null) && (lvEvents.getChildCount() > 0)) {
-          // check if the first item of the list is visible
-          boolean firstItemVisible = lvEvents.getFirstVisiblePosition() == 0;
-          // check if the top of the first item is visible
-          boolean topOfFirstItemVisible = lvEvents.getChildAt(0).getTop() == 0;
-          // enabling or disabling the refresh layout
-          enable = firstItemVisible && topOfFirstItemVisible;
+            emptyEventsTextView.setVisibility(View.GONE);
+            lvEvents.setVisibility(View.VISIBLE);
         }
-        refreshLayout.setEnabled(enable);
-      }
-    });
 
-    refreshLayout.setOnRefreshListener(this);
-    setAppearance();
+        adapter = new EventsCursorAdapter(getBaseContext(), dbCursor, dbHelper);
+        lvEvents.setAdapter(adapter);
 
-    getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mProgressScreen.hide();
     }
-  }
+    };
+    /**
+    * TextView for the empty events message
+    */
+    private TextView emptyEventsTextView;
+    /**
+    * Layout with "Pull to refresh" function
+    */
+    private SwipeRefreshLayout refreshLayout;
+    /**
+    * Progress screen
+    */
+    private ProgressScreen mProgressScreen;
 
-    public void myClickHandler (View v){
+    /* (non-Javadoc)
+    * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
+    */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.list_items_pulltorefresh);
+
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_list);
+        emptyEventsTextView = (TextView) findViewById(R.id.list_item_title);
+
+        View mProgressScreenView = findViewById(R.id.progress_screen);
+        mProgressScreen = new ProgressScreen(mProgressScreenView, refreshLayout,
+                getString(R.string.loadingMsg), this);
+
+        lvEvents = (ListView) findViewById(R.id.list_pulltorefresh);
+
+        lvEvents.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                               int visibleItemCount, int totalItemCount) {
+
+            boolean enable = true;
+            if ((lvEvents != null) && (lvEvents.getChildCount() > 0)) {
+                // check if the first item of the list is visible
+                boolean firstItemVisible = lvEvents.getFirstVisiblePosition() == 0;
+                // check if the top of the first item is visible
+                boolean topOfFirstItemVisible = lvEvents.getChildAt(0).getTop() == 0;
+                // enabling or disabling the refresh layout
+                enable = firstItemVisible && topOfFirstItemVisible;
+            }
+            refreshLayout.setEnabled(enable);
+            }
+        });
+
+        refreshLayout.setOnRefreshListener(this);
+        setAppearance();
+
+        getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+          getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    public void onClickEvent (View v){
         int position = -1;
+        int numEvents = lvEvents.getChildCount();
         LinearLayout layoutView = (LinearLayout)v;
-        for (int i=0; i < lvEvents.getChildCount(); i++)
-        {
-              if(((TextView)lvEvents.getChildAt(i).findViewById(R.id.toptext)).getText().equals(((TextView)layoutView.getChildAt(0).findViewById(R.id.toptext)).getText()))
-              position = i;
+        TextView eventNameCurrent = (TextView)layoutView.getChildAt(0).findViewById(R.id.toptext);
+
+        for (int i=0; i < numEvents; i++){
+            TextView eventNameList = (TextView)lvEvents.getChildAt(i).findViewById(R.id.toptext);
+            if(eventNameList.getText().equals(eventNameCurrent.getText()))
+            position = i;
         }
 
         Intent activity = new Intent(getApplicationContext(), UsersActivity.class);
@@ -177,74 +184,107 @@ public class Rollcall extends MenuExpandableListActivity implements
         startActivity(activity);
     }
 
-  /* (non-Javadoc)
-   * @see es.ugr.swad.swadroid.MenuExpandableListActivity#Override(android.os.Bundle)
-   */
-  @Override
-  protected void onStart() {
-    super.onStart();
-    SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
+    public void openOptions (View v){
+        int numEvents = lvEvents.getChildCount();
+        View layoutView = (RelativeLayout)v.getParent().getParent();
+        ImageButton openOptionsCurrent = (ImageButton) layoutView.findViewById(R.id.openEventOptions);
+        ImageButton closeOptionsCurrent = (ImageButton) layoutView.findViewById(R.id.closeEventOptions);
+        LinearLayout eventOptionsCurrent = (LinearLayout) layoutView.findViewById(R.id.optionsButtons);
 
-    //Refresh ListView of events
-    refreshAdapter();
-  }
+        for (int i=0; i < numEvents; i++){
+            ImageButton openOptions = (ImageButton) lvEvents.getChildAt(i).findViewById(R.id.openEventOptions);
+            ImageButton closeOptions = (ImageButton) lvEvents.getChildAt(i).findViewById(R.id.closeEventOptions);
+            LinearLayout eventOptions = (LinearLayout) lvEvents.getChildAt(i).findViewById(R.id.optionsButtons);
 
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-    switch (requestCode) {
-      case Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE:
-        refreshAdapter();
-        break;
+            openOptions.setVisibility(View.VISIBLE);
+            closeOptions.setVisibility(View.GONE);
+            eventOptions.setVisibility(View.GONE);
+        }
+
+        openOptionsCurrent.setVisibility(View.GONE);
+        closeOptionsCurrent.setVisibility(View.VISIBLE);
+        eventOptionsCurrent.setVisibility(View.VISIBLE);
     }
-  }
 
-  private void refreshAdapter() {
+    public void closeOptions (View v){
+        View layoutView = (RelativeLayout)v.getParent().getParent();
+        ImageButton openOptionsCurrent = (ImageButton) layoutView.findViewById(R.id.openEventOptions);
+        ImageButton closeOptionsCurrent = (ImageButton) layoutView.findViewById(R.id.closeEventOptions);
+        LinearLayout eventOptionsCurrent = (LinearLayout) layoutView.findViewById(R.id.optionsButtons);
+
+        openOptionsCurrent.setVisibility(View.VISIBLE);
+        closeOptionsCurrent.setVisibility(View.GONE);
+        eventOptionsCurrent.setVisibility(View.GONE);
+    }
+
+    /* (non-Javadoc)
+    * @see es.ugr.swad.swadroid.MenuExpandableListActivity#Override(android.os.Bundle)
+    */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
+
+        //Refresh ListView of events
+        refreshAdapter();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        switch (requestCode) {
+            case Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE:
+                refreshAdapter();
+                break;
+        }
+    }
+
+    private void refreshAdapter() {
     mHandler.post(mRunnable);
-  }
+    }
 
-  private void refreshEvents() {
-    mProgressScreen.show();
-    Intent activity = new Intent(this, EventsDownload.class);
-    startActivityForResult(activity, Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE);
-  }
+    private void refreshEvents() {
+        mProgressScreen.show();
+        Intent activity = new Intent(this, EventsDownload.class);
+        startActivityForResult(activity, Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE);
+    }
 
-  /**
-   * It shows the SwipeRefreshLayout progress
-   */
-  private void showSwipeProgress() {
+    /**
+    * It shows the SwipeRefreshLayout progress
+    */
+    private void showSwipeProgress() {
     refreshLayout.setRefreshing(true);
-  }
+    }
 
-  /**
-   * It shows the SwipeRefreshLayout progress
-   */
-  private void hideSwipeProgress() {
+    /**
+    * It shows the SwipeRefreshLayout progress
+    */
+    private void hideSwipeProgress() {
     refreshLayout.setRefreshing(false);
-  }
+    }
 
-  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-  private void setAppearance() {
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    private void setAppearance() {
     refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
             android.R.color.holo_green_light,
             android.R.color.holo_orange_light,
             android.R.color.holo_red_light);
-  }
+    }
 
-  private boolean hasPendingEvents() {
+    private boolean hasPendingEvents() {
     boolean hasPendingEvents = false;
     TextView sendingStateTextView;
-      int i = 0;
+    int i = 0;
 
     if ((lvEvents != null) && (lvEvents.getChildCount() > 0)) {
-       while(!hasPendingEvents && (i<lvEvents.getChildCount())) {
-          sendingStateTextView = (TextView) lvEvents.getChildAt(i).findViewById(R.id.sendingStateTextView);
-          hasPendingEvents = sendingStateTextView.getText().equals(getString(R.string.sendingStatePending));
-          i++;
+        while(!hasPendingEvents && (i<lvEvents.getChildCount())) {
+            sendingStateTextView = (TextView) lvEvents.getChildAt(i).findViewById(R.id.sendingStateTextView);
+            hasPendingEvents = sendingStateTextView.getText().equals(getString(R.string.sendingStatePending));
+            i++;
         }
     }
 
     return hasPendingEvents;
-  }
+    }
 
     private void updateEvents() {
         showSwipeProgress();
@@ -254,42 +294,42 @@ public class Rollcall extends MenuExpandableListActivity implements
         hideSwipeProgress();
     }
 
-  /**
-   * It must be overriden by parent classes if manual swipe is enabled.
-   */
-  @Override
-  public void onRefresh() {
-    if(!hasPendingEvents()) {
-        updateEvents();
-    } else {
-        AlertDialog cleanEventsDialog = DialogFactory.createWarningDialog(this,
-                -1,
-                R.string.areYouSure,
-                R.string.updatePendingEventsMsg,
-                R.string.yesMsg,
-                R.string.noMsg,
-                true,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+    /**
+    * It must be overriden by parent classes if manual swipe is enabled.
+    */
+    @Override
+    public void onRefresh() {
+        if(!hasPendingEvents()) {
+            updateEvents();
+        } else {
+            AlertDialog cleanEventsDialog = DialogFactory.createWarningDialog(this,
+                    -1,
+                    R.string.areYouSure,
+                    R.string.updatePendingEventsMsg,
+                    R.string.yesMsg,
+                    R.string.noMsg,
+                    true,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
 
-                        updateEvents();
-                    }
-                },
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                },
-                null);
+                            updateEvents();
+                        }
+                    },
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    },
+                    null);
 
-        cleanEventsDialog.show();
+            cleanEventsDialog.show();
+        }
+
+        hideSwipeProgress();
     }
 
-      hideSwipeProgress();
-  }
-
-  private static class RefreshAdapterHandler extends Handler {
+    private static class RefreshAdapterHandler extends Handler {
 
     private final WeakReference<Rollcall> mActivity;
 
@@ -297,5 +337,5 @@ public class Rollcall extends MenuExpandableListActivity implements
       mActivity = new WeakReference<>(activity);
     }
 
-  }
+    }
 }

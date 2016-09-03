@@ -22,8 +22,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_toRightOf="@+id/icon"
-        android:layout_toLeftOf="@+id/openEventOptions"
-        android:onClick="myClickHandler" >
+        android:layout_toLeftOf="@+id/buttonRight"
+        android:onClick="onClickEvent" >
 
         <TextView
             android:id="@+id/toptext"
@@ -117,25 +117,32 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/openEventOptions"
-        android:src="@drawable/open_event_options"
-        android:layout_height="match_parent"
+    <LinearLayout
+        android:id="@+id/buttonRight"
         android:layout_width="30dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="19dp"
-        android:background="@color/background"
-        android:layout_alignParentRight="true"/>
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true">
 
-    <ImageButton
-        android:id="@+id/closeEventOptions"
-        android:src="@drawable/close_event_options"
-        android:layout_height="match_parent"
-        android:layout_width="30dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="19dp"
-        android:background="@color/background"
-        android:layout_alignParentRight="true"
-        android:visibility="gone"/>
+        <ImageButton
+            android:id="@+id/openEventOptions"
+            android:src="@drawable/open_event_options"
+            android:layout_height="30dp"
+            android:layout_width="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="19dp"
+            android:background="@color/background"
+            android:onClick="openOptions"/>
+
+        <ImageButton
+            android:id="@+id/closeEventOptions"
+            android:src="@drawable/close_event_options"
+            android:layout_height="30dp"
+            android:layout_width="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="19dp"
+            android:background="@color/background"
+            android:visibility="gone"
+            android:onClick="closeOptions"/>
+    </LinearLayout>
 
 </RelativeLayout>
