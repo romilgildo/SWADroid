@@ -32,6 +32,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -112,19 +113,6 @@ public class Rollcall extends MenuExpandableListActivity implements
    * Progress screen
    */
   private ProgressScreen mProgressScreen;
-  /**
-   * ListView click listener
-   */
-  private ListView.OnItemClickListener clickListener = new ListView.OnItemClickListener() {
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-      Intent activity = new Intent(getApplicationContext(),
-                                   UsersActivity.class);
-      activity.putExtra("attendanceEventCode",
-                        (int) adapter.getItemId(position));
-      startActivity(activity);
-    }
-  };
 
   /* (non-Javadoc)
    * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
@@ -143,7 +131,6 @@ public class Rollcall extends MenuExpandableListActivity implements
 
     lvEvents = (ListView) findViewById(R.id.list_pulltorefresh);
 
-    lvEvents.setOnItemClickListener(clickListener);
     lvEvents.setOnScrollListener(new AbsListView.OnScrollListener() {
       @Override
       public void onScrollStateChanged(AbsListView absListView, int scrollState) {
@@ -175,6 +162,20 @@ public class Rollcall extends MenuExpandableListActivity implements
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
   }
+
+    public void myClickHandler (View v){
+        int position = -1;
+        LinearLayout layoutView = (LinearLayout)v;
+        for (int i=0; i < lvEvents.getChildCount(); i++)
+        {
+              if(((TextView)lvEvents.getChildAt(i).findViewById(R.id.toptext)).getText().equals(((TextView)layoutView.getChildAt(0).findViewById(R.id.toptext)).getText()))
+              position = i;
+        }
+
+        Intent activity = new Intent(getApplicationContext(), UsersActivity.class);
+        activity.putExtra("attendanceEventCode", (int) adapter.getItemId(position));
+        startActivity(activity);
+    }
 
   /* (non-Javadoc)
    * @see es.ugr.swad.swadroid.MenuExpandableListActivity#Override(android.os.Bundle)

@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -57,6 +58,8 @@ public class EventsCursorAdapter extends CursorAdapter {
         TextView startTimeTextView;
         TextView endTimeTextView;
         TextView sendingStateTextView;
+        ImageButton openOptions;
+        ImageButton closeOptions;
     }
 
     /**
@@ -112,7 +115,7 @@ public class EventsCursorAdapter extends CursorAdapter {
         startTimeCalendar.setTimeInMillis(startTime * 1000L);
         endTimeCalendar.setTimeInMillis(endTime * 1000L);
 
-        ViewHolder holder = (ViewHolder) view.getTag();
+        final ViewHolder holder = (ViewHolder) view.getTag();
         view.setTag(holder);
 
         holder.iconTextView = (TextView) view.findViewById(R.id.icon);
@@ -125,8 +128,29 @@ public class EventsCursorAdapter extends CursorAdapter {
         holder.startTimeTextView = (TextView) view.findViewById(R.id.startTimeTextView);
         holder.endTimeTextView = (TextView) view.findViewById(R.id.endTimeTextView);
         holder.sendingStateTextView = (TextView) view.findViewById(R.id.sendingStateTextView);
+        holder.openOptions = (ImageButton) view.findViewById(R.id.openEventOptions);
+        holder.closeOptions = (ImageButton) view.findViewById(R.id.closeEventOptions);
 
         holder.titleTextView.setText(title);
+
+        holder.openOptions.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                holder.openOptions.setVisibility(View.GONE);
+                holder.closeOptions.setVisibility(View.VISIBLE);
+            }
+        });
+
+        holder.closeOptions.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                holder.closeOptions.setVisibility(View.GONE);
+                holder.openOptions.setVisibility(View.VISIBLE);
+            }
+        });
+
         holder.startTimeTextView.setText(df.format(startTimeCalendar.getTime()));
         holder.endTimeTextView.setText(df.format(endTimeCalendar.getTime()));
 
