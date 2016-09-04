@@ -168,16 +168,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
     }
 
     public void onClickEvent (View v){
-        int position = -1;
-        int numEvents = lvEvents.getChildCount();
-        LinearLayout layoutView = (LinearLayout)v;
-        TextView eventNameCurrent = (TextView)layoutView.getChildAt(0).findViewById(R.id.toptext);
-
-        for (int i=0; i < numEvents; i++){
-            TextView eventNameList = (TextView)lvEvents.getChildAt(i).findViewById(R.id.toptext);
-            if(eventNameList.getText().equals(eventNameCurrent.getText()))
-            position = i;
-        }
+        int position = lvEvents.getPositionForView(v);
 
         Intent activity = new Intent(getApplicationContext(), UsersActivity.class);
         activity.putExtra("attendanceEventCode", (int) adapter.getItemId(position));
@@ -200,6 +191,8 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
             closeOptions.setVisibility(View.GONE);
             eventOptions.setVisibility(View.GONE);
         }
+
+        lvEvents.invalidateViews();
 
         openOptionsCurrent.setVisibility(View.GONE);
         closeOptionsCurrent.setVisibility(View.VISIBLE);

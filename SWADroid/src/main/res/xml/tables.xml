@@ -374,16 +374,16 @@
         name="events_courses"
         new-in-version="19"
         to-string="%name%" >
-    <field
-        name="eventCode"
-        foreign-table="events_attendances"
-        obligatory="true"
-        type="foreign-key" />
-    <field
-        name="crsCod"
-        foreign-table="courses"
-        obligatory="true"
-        type="foreign-key" />
+        <field
+            name="eventCode"
+            foreign-table="events_attendances"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="crsCod"
+            foreign-table="courses"
+            obligatory="true"
+            type="foreign-key" />
     </table>
     <table
         name="groups"
