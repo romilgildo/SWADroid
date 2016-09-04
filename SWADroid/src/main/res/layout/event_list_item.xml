@@ -93,17 +93,31 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:background="@color/background"
-                android:layout_alignParentLeft="true"/>
+                android:layout_alignParentLeft="true"
+                android:onClick="showDeleteDialog"/>
 
             <ImageButton
-                android:id="@+id/hideEvent"
+                android:id="@+id/showEvent"
                 android:src="@drawable/hide_event"
                 android:layout_height="30dp"
                 android:layout_width="30dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/background"
-                android:layout_alignParentLeft="true"/>
+                android:layout_alignParentLeft="true"
+                android:onClick="hideEvent"/>
+
+            <ImageButton
+                android:id="@+id/hideEvent"
+                android:src="@drawable/show_event"
+                android:layout_height="30dp"
+                android:layout_width="30dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/background"
+                android:layout_alignParentLeft="true"
+                android:visibility="gone"
+                android:onClick="showEvent"/>
 
             <ImageButton
                 android:id="@+id/editEvent"

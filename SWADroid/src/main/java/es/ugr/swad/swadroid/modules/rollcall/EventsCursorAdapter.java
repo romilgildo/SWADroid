@@ -99,15 +99,14 @@ public class EventsCursorAdapter extends CursorAdapter {
         iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME);
     }
 
+    //these two methods are used to avoid repeating rows in the listview when you scroll
     @Override
     public int getViewTypeCount() {
-
         return getCount();
     }
 
     @Override
     public int getItemViewType(int position) {
-
         return position;
     }
 

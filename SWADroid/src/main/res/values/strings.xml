@@ -347,4 +347,6 @@
     <string name="NOTfrequent_users">There are no frequent users</string>
     <string name="replyModuleLabel">Reply message</string>
     <string name="primaryReceiver">Primary</string>
+    <string name="removeEvent">Are you sure you want to detele the #nameEvent# event?</string>
+    <string name="eventRemoved">#nameEvent# event removed</string>
 </resources>

@@ -38,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -167,49 +168,6 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         }
     }
 
-    public void onClickEvent (View v){
-        int position = lvEvents.getPositionForView(v);
-
-        Intent activity = new Intent(getApplicationContext(), UsersActivity.class);
-        activity.putExtra("attendanceEventCode", (int) adapter.getItemId(position));
-        startActivity(activity);
-    }
-
-    public void openOptions (View v){
-        int numEvents = lvEvents.getChildCount();
-        View layoutView = (RelativeLayout)v.getParent().getParent();
-        ImageButton openOptionsCurrent = (ImageButton) layoutView.findViewById(R.id.openEventOptions);
-        ImageButton closeOptionsCurrent = (ImageButton) layoutView.findViewById(R.id.closeEventOptions);
-        LinearLayout eventOptionsCurrent = (LinearLayout) layoutView.findViewById(R.id.optionsButtons);
-
-        for (int i=0; i < numEvents; i++){
-            ImageButton openOptions = (ImageButton) lvEvents.getChildAt(i).findViewById(R.id.openEventOptions);
-            ImageButton closeOptions = (ImageButton) lvEvents.getChildAt(i).findViewById(R.id.closeEventOptions);
-            LinearLayout eventOptions = (LinearLayout) lvEvents.getChildAt(i).findViewById(R.id.optionsButtons);
-
-            openOptions.setVisibility(View.VISIBLE);
-            closeOptions.setVisibility(View.GONE);
-            eventOptions.setVisibility(View.GONE);
-        }
-
-        lvEvents.invalidateViews();
-
-        openOptionsCurrent.setVisibility(View.GONE);
-        closeOptionsCurrent.setVisibility(View.VISIBLE);
-        eventOptionsCurrent.setVisibility(View.VISIBLE);
-    }
-
-    public void closeOptions (View v){
-        View layoutView = (RelativeLayout)v.getParent().getParent();
-        ImageButton openOptionsCurrent = (ImageButton) layoutView.findViewById(R.id.openEventOptions);
-        ImageButton closeOptionsCurrent = (ImageButton) layoutView.findViewById(R.id.closeEventOptions);
-        LinearLayout eventOptionsCurrent = (LinearLayout) layoutView.findViewById(R.id.optionsButtons);
-
-        openOptionsCurrent.setVisibility(View.VISIBLE);
-        closeOptionsCurrent.setVisibility(View.GONE);
-        eventOptionsCurrent.setVisibility(View.GONE);
-    }
-
     /* (non-Javadoc)
     * @see es.ugr.swad.swadroid.MenuExpandableListActivity#Override(android.os.Bundle)
     */
@@ -257,33 +215,31 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void setAppearance() {
-    refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-            android.R.color.holo_green_light,
-            android.R.color.holo_orange_light,
-            android.R.color.holo_red_light);
+        refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     private boolean hasPendingEvents() {
-    boolean hasPendingEvents = false;
-    TextView sendingStateTextView;
-    int i = 0;
+        boolean hasPendingEvents = false;
+        TextView sendingStateTextView;
+        int i = 0;
 
-    if ((lvEvents != null) && (lvEvents.getChildCount() > 0)) {
-        while(!hasPendingEvents && (i<lvEvents.getChildCount())) {
-            sendingStateTextView = (TextView) lvEvents.getChildAt(i).findViewById(R.id.sendingStateTextView);
-            hasPendingEvents = sendingStateTextView.getText().equals(getString(R.string.sendingStatePending));
-            i++;
+        if ((lvEvents != null) && (lvEvents.getChildCount() > 0)) {
+            while(!hasPendingEvents && (i<lvEvents.getChildCount())) {
+                sendingStateTextView = (TextView) lvEvents.getChildAt(i).findViewById(R.id.sendingStateTextView);
+                hasPendingEvents = sendingStateTextView.getText().equals(getString(R.string.sendingStatePending));
+                i++;
+            }
         }
-    }
 
-    return hasPendingEvents;
+        return hasPendingEvents;
     }
 
     private void updateEvents() {
         showSwipeProgress();
-
         refreshEvents();
-
         hideSwipeProgress();
     }
 
@@ -324,11 +280,111 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
 
     private static class RefreshAdapterHandler extends Handler {
 
-    private final WeakReference<Rollcall> mActivity;
+        private final WeakReference<Rollcall> mActivity;
 
-    public RefreshAdapterHandler(Rollcall activity) {
-      mActivity = new WeakReference<>(activity);
+        public RefreshAdapterHandler(Rollcall activity) {
+          mActivity = new WeakReference<>(activity);
+        }
     }
 
+    public void onClickEvent(View v) {
+        int position = lvEvents.getPositionForView(v);
+
+        Intent activity = new Intent(getApplicationContext(), UsersActivity.class);
+        activity.putExtra("attendanceEventCode", (int) adapter.getItemId(position));
+        startActivity(activity);
+    }
+
+    public void openOptions(View v) {
+        int numEvents = lvEvents.getChildCount();
+        int position = lvEvents.getPositionForView(v);
+        View layoutView = (RelativeLayout)v.getParent().getParent();
+        ImageButton openOptionsCurrent = (ImageButton) layoutView.findViewById(R.id.openEventOptions);
+        ImageButton closeOptionsCurrent = (ImageButton) layoutView.findViewById(R.id.closeEventOptions);
+        LinearLayout eventOptionsCurrent = (LinearLayout) layoutView.findViewById(R.id.optionsButtons);
+
+        //recharge the listview to close all option buttons
+        lvEvents.invalidateViews();
+
+        for (int i=0; i < numEvents; i++){
+            ImageButton openOptions = (ImageButton) lvEvents.getChildAt(i).findViewById(R.id.openEventOptions);
+            ImageButton closeOptions = (ImageButton) lvEvents.getChildAt(i).findViewById(R.id.closeEventOptions);
+            LinearLayout eventOptions = (LinearLayout) lvEvents.getChildAt(i).findViewById(R.id.optionsButtons);
+
+            openOptions.setVisibility(View.VISIBLE);
+            closeOptions.setVisibility(View.GONE);
+            eventOptions.setVisibility(View.GONE);
+        }
+
+        openOptionsCurrent.setVisibility(View.GONE);
+        closeOptionsCurrent.setVisibility(View.VISIBLE);
+        eventOptionsCurrent.setVisibility(View.VISIBLE);
+
+        //if it's the last event of list, screen scroll to the end
+        if(position == lvEvents.getCount()-1)
+            lvEvents.setSelection(adapter.getCount()-1);
+    }
+
+    public void closeOptions(View v) {
+        View layoutView = (RelativeLayout) v.getParent().getParent();
+        ImageButton openOptionsCurrent = (ImageButton) layoutView.findViewById(R.id.openEventOptions);
+        ImageButton closeOptionsCurrent = (ImageButton) layoutView.findViewById(R.id.closeEventOptions);
+        LinearLayout eventOptionsCurrent = (LinearLayout) layoutView.findViewById(R.id.optionsButtons);
+
+        openOptionsCurrent.setVisibility(View.VISIBLE);
+        closeOptionsCurrent.setVisibility(View.GONE);
+        eventOptionsCurrent.setVisibility(View.GONE);
+    }
+
+    public void showDeleteDialog (View v){
+        final int position = lvEvents.getPositionForView(v);
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(Rollcall.this);
+        builder.setTitle(R.string.areYouSure);
+
+        View layoutView = (LinearLayout) v.getParent().getParent();
+        TextView nameTextView = (TextView) layoutView.findViewById(R.id.toptext);
+        final String nameEvent = nameTextView.getText().toString();
+
+        String dialog = getResources().getString(R.string.removeEvent);
+        dialog = dialog.replaceAll("#nameEvent#", "\"" + nameEvent + "\"");
+        builder.setMessage(dialog);
+
+        builder.setNegativeButton(getString(R.string.cancelMsg), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        builder.setPositiveButton(getString(R.string.acceptMsg), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                deleteEvent((int) adapter.getItemId(position), nameEvent);
+            }
+        });
+
+        android.support.v7.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void deleteEvent(int eventCode, String nameEvent) {
+        String text = getResources().getString(R.string.eventRemoved);
+        text = text.replaceAll("#nameEvent#", "\"" + nameEvent + "\"");
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+    }
+
+    public void hideEvent(View v) {
+        View layoutView = (LinearLayout) v.getParent();
+        ImageButton showEventCurrent = (ImageButton) layoutView.findViewById(R.id.showEvent);
+        ImageButton hideEventCurrent = (ImageButton) layoutView.findViewById(R.id.hideEvent);
+
+        showEventCurrent.setVisibility(View.GONE);
+        hideEventCurrent.setVisibility(View.VISIBLE);
+    }
+
+    public void showEvent(View v) {
+        View layoutView = (LinearLayout) v.getParent();
+        ImageButton showEventCurrent = (ImageButton) layoutView.findViewById(R.id.showEvent);
+        ImageButton hideEventCurrent = (ImageButton) layoutView.findViewById(R.id.hideEvent);
+
+        showEventCurrent.setVisibility(View.VISIBLE);
+        hideEventCurrent.setVisibility(View.GONE);
     }
 }

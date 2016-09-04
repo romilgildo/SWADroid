@@ -337,4 +337,6 @@
     <string name="NOTfrequent_users">No hay usuarios frecuentes</string>
     <string name="replyModuleLabel">Responder mensaje</string>
     <string name="primaryReceiver">Principal</string>
+    <string name="removeEvent">¿Realmente desea eliminar el evento #nameEvent#?</string>
+    <string name="eventRemoved">Evento #nameEvent# eliminado</string>
 </resources>
