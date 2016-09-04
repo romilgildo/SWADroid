@@ -349,4 +349,5 @@
     <string name="primaryReceiver">Primary</string>
     <string name="removeEvent">Are you sure you want to detele the #nameEvent# event?</string>
     <string name="eventRemoved">#nameEvent# event removed</string>
+    <string name="actionBarNewEvent">New event</string>
 </resources>

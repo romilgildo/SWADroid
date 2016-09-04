@@ -30,6 +30,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -186,6 +188,29 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
             case Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE:
                 refreshAdapter();
                 break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.events_list_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.newEvent:
+                try {
+                  //crear actividad con formulario de evento y luego llamar a la función sendAttendanceEvent;
+                } catch (Exception e) {
+                    String errorMsg = getString(R.string.errorServerResponseMsg);
+                    error(errorMsg, e, true);
+                }
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -386,5 +411,9 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
 
         showEventCurrent.setVisibility(View.VISIBLE);
         hideEventCurrent.setVisibility(View.GONE);
+    }
+
+    public void editEvent(View v) {
+        //crear actividad con formulario de evento y luego llamar a la función sendAttendanceEvent;
     }
 }

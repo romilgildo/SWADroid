@@ -127,7 +127,8 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/background"
-                android:layout_alignParentLeft="true"/>
+                android:layout_alignParentLeft="true"
+                android:onClick="editEvent"/>
         </LinearLayout>
     </LinearLayout>
 
