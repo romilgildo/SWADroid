@@ -87,11 +87,8 @@
             <ImageButton
                 android:id="@+id/deleteEvent"
                 android:src="@drawable/not_ok"
-                android:layout_height="30dp"
-                android:layout_width="30dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_height="40dp"
+                android:layout_width="40dp"
                 android:background="@color/background"
                 android:layout_alignParentLeft="true"
                 android:onClick="showDeleteDialog"/>
@@ -99,10 +96,8 @@
             <ImageButton
                 android:id="@+id/showEvent"
                 android:src="@drawable/hide_event"
-                android:layout_height="30dp"
-                android:layout_width="30dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="40dp"
+                android:layout_width="40dp"
                 android:background="@color/background"
                 android:layout_alignParentLeft="true"
                 android:onClick="hideEvent"/>
@@ -110,10 +105,8 @@
             <ImageButton
                 android:id="@+id/hideEvent"
                 android:src="@drawable/show_event"
-                android:layout_height="30dp"
-                android:layout_width="30dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="40dp"
+                android:layout_width="40dp"
                 android:background="@color/background"
                 android:layout_alignParentLeft="true"
                 android:visibility="gone"
@@ -122,10 +115,8 @@
             <ImageButton
                 android:id="@+id/editEvent"
                 android:src="@drawable/edit_event"
-                android:layout_height="30dp"
-                android:layout_width="30dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="40dp"
+                android:layout_width="40dp"
                 android:background="@color/background"
                 android:layout_alignParentLeft="true"
                 android:onClick="editEvent"/>
@@ -134,15 +125,16 @@
 
     <LinearLayout
         android:id="@+id/buttonRight"
-        android:layout_width="30dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true">
+        android:layout_width="50dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/openEventOptions"
             android:src="@drawable/open_event_options"
-            android:layout_height="30dp"
-            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
             android:layout_marginRight="5dp"
             android:layout_marginTop="19dp"
             android:background="@color/background"
@@ -151,8 +143,8 @@
         <ImageButton
             android:id="@+id/closeEventOptions"
             android:src="@drawable/close_event_options"
-            android:layout_height="30dp"
-            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
             android:layout_marginRight="5dp"
             android:layout_marginTop="19dp"
             android:background="@color/background"

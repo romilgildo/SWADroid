@@ -102,7 +102,13 @@ public class EventsCursorAdapter extends CursorAdapter {
     //these two methods are used to avoid repeating rows in the listview when you scroll
     @Override
     public int getViewTypeCount() {
-        return getCount();
+        int count;
+        if (cursor.getCount() > 0) {
+            count = getCount();
+        } else {
+            count = 1;
+        }
+        return count;
     }
 
     @Override

@@ -24,6 +24,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
@@ -400,8 +401,12 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         ImageButton showEventCurrent = (ImageButton) layoutView.findViewById(R.id.showEvent);
         ImageButton hideEventCurrent = (ImageButton) layoutView.findViewById(R.id.hideEvent);
 
+        layoutView = (LinearLayout) v.getParent().getParent();
+        TextView nameTextView = (TextView) layoutView.findViewById(R.id.toptext);
+
         showEventCurrent.setVisibility(View.GONE);
         hideEventCurrent.setVisibility(View.VISIBLE);
+        nameTextView.setTextColor(Color.GRAY);
     }
 
     public void showEvent(View v) {
@@ -409,8 +414,12 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         ImageButton showEventCurrent = (ImageButton) layoutView.findViewById(R.id.showEvent);
         ImageButton hideEventCurrent = (ImageButton) layoutView.findViewById(R.id.hideEvent);
 
+        layoutView = (LinearLayout) v.getParent().getParent();
+        TextView nameTextView = (TextView) layoutView.findViewById(R.id.toptext);
+
         showEventCurrent.setVisibility(View.VISIBLE);
         hideEventCurrent.setVisibility(View.GONE);
+        nameTextView.setTextColor(Color.BLACK);
     }
 
     public void editEvent(View v) {
