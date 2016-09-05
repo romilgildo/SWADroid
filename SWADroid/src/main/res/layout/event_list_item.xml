@@ -125,7 +125,7 @@
 
     <LinearLayout
         android:id="@+id/buttonRight"
-        android:layout_width="50dp"
+        android:layout_width="35dp"
         android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
         android:orientation="horizontal">

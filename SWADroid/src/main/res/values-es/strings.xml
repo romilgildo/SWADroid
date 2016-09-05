@@ -340,4 +340,10 @@
     <string name="removeEvent">¿Realmente desea eliminar el evento #nameEvent#?</string>
     <string name="eventRemoved">Evento #nameEvent# eliminado</string>
     <string name="actionBarNewEvent">Nuevo evento</string>
+    <string name="actionBarEditEvent">Editar evento</string>
+    <string name="titleEvent">Título:</string>
+    <string name="descriptionEvent">Descripción:</string>
+    <string name="cancelNewEventForm">Va a cancelar la cración del evento</string>
+    <string name="cancelEditEventForm">Va a descartar los cambios del evento</string>
+    <string name="eventCreated">Evento creado</string>
 </resources>

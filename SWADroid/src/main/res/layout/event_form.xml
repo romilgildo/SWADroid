@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <include layout="@layout/progress_screen" />
+
+    <LinearLayout
+        android:id="@+id/event_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical" >
+
+        <TextView android:id="@+id/name_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/titleEvent"
+            android:textColor="@color/foreground1"
+            android:textSize="19sp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="4dp"/>
+
+        <EditText
+            android:id="@+id/name_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/foreground1" />
+
+        <TextView android:id="@+id/description_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/descriptionEvent"
+            android:textColor="@color/foreground1"
+            android:textSize="19sp"
+            android:layout_marginLeft="5dp" />
+
+        <EditText
+            android:id="@+id/description_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/foreground1" />
+    </LinearLayout>
+
+</RelativeLayout>

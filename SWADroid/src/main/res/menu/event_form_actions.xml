@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:swadroid="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/confirm_event"
+        android:icon="@drawable/ic_action_accept"
+        swadroid:showAsAction="always"
+        android:title="@string/confirmMsg"/>
+</menu>

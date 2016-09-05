@@ -189,6 +189,10 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
             case Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE:
                 refreshAdapter();
                 break;
+            case Constants.EVENT_FORM_REQUEST_CODE:
+                refreshEvents();
+                Toast.makeText(this, getString(R.string.eventCreated), Toast.LENGTH_LONG).show();
+                break;
         }
     }
 
@@ -203,7 +207,9 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         switch (item.getItemId()) {
             case R.id.newEvent:
                 try {
-                  //crear actividad con formulario de evento y luego llamar a la función sendAttendanceEvent;
+                    Intent intent = new Intent (Rollcall.this, EventForm.class);
+                    intent.putExtra("titleEventForm", getResources().getString(R.string.actionBarNewEvent));
+                    startActivityForResult(intent, Constants.EVENT_FORM_REQUEST_CODE);
                 } catch (Exception e) {
                     String errorMsg = getString(R.string.errorServerResponseMsg);
                     error(errorMsg, e, true);
