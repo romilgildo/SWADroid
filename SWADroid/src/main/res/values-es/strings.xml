@@ -346,4 +346,8 @@
     <string name="cancelNewEventForm">Va a cancelar la cración del evento</string>
     <string name="cancelEditEventForm">Va a descartar los cambios del evento</string>
     <string name="eventCreated">Evento creado</string>
+    <string name="initialDate">Fecha inicial:</string>
+    <string name="finalDate">Fecha final:</string>
+    <string name="timeEvent">Hora:</string>
+
 </resources>

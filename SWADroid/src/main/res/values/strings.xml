@@ -356,4 +356,7 @@
     <string name="cancelNewEventForm">You are going to cancel the new event</string>
     <string name="cancelEditEventForm">You are going to discard the changes of the event</string>
     <string name="eventCreated">Event created</string>
+    <string name="initialDate">Initial date:</string>
+    <string name="finalDate">Final date:</string>
+    <string name="timeEvent">Time:</string>
 </resources>

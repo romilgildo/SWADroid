@@ -44,6 +44,77 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/foreground1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal" >
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:stretchColumns="0,1">
+                <TableRow>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/initialDate"
+                        android:textColor="@color/foreground1"
+                        android:textSize="19sp"
+                        android:layout_marginLeft="5dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/timeEvent"
+                        android:textColor="@color/foreground1"
+                        android:textSize="19sp"
+                        android:layout_marginLeft="5dp" />
+                </TableRow>
+                <TableRow>
+                    <EditText
+                        android:id="@+id/initialDateText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/foreground1" />
+                    <EditText
+                        android:id="@+id/initialTimeText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/foreground1" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/finalDate"
+                        android:textColor="@color/foreground1"
+                        android:textSize="19sp"
+                        android:layout_marginLeft="5dp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/timeEvent"
+                        android:textColor="@color/foreground1"
+                        android:textSize="19sp"
+                        android:layout_marginLeft="5dp" />
+                </TableRow>
+                <TableRow>
+                    <EditText
+                        android:id="@+id/finalDateText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/foreground1"/>
+                    <EditText
+                        android:id="@+id/finalTimeText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/foreground1"/>
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

@@ -21,11 +21,11 @@ package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,7 +35,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -43,10 +43,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
+import java.io.Serializable;
 import java.lang.ref.WeakReference;
-
+import java.util.List;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
@@ -122,6 +121,8 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
     */
     private ProgressScreen mProgressScreen;
 
+    private List<Long> eventsCode;
+
     /* (non-Javadoc)
     * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
     */
@@ -188,10 +189,10 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         switch (requestCode) {
             case Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE:
                 refreshAdapter();
+                eventsCode = (List) intent.getSerializableExtra("eventsCode");
                 break;
             case Constants.EVENT_FORM_REQUEST_CODE:
                 refreshEvents();
-                Toast.makeText(this, getString(R.string.eventCreated), Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -206,14 +207,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newEvent:
-                try {
-                    Intent intent = new Intent (Rollcall.this, EventForm.class);
-                    intent.putExtra("titleEventForm", getResources().getString(R.string.actionBarNewEvent));
-                    startActivityForResult(intent, Constants.EVENT_FORM_REQUEST_CODE);
-                } catch (Exception e) {
-                    String errorMsg = getString(R.string.errorServerResponseMsg);
-                    error(errorMsg, e, true);
-                }
+                openEventForm(getResources().getString(R.string.actionBarNewEvent), 0);
                 return true;
 
             default:
@@ -388,7 +382,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
 
         builder.setPositiveButton(getString(R.string.acceptMsg), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                deleteEvent((int) adapter.getItemId(position), nameEvent);
+                removeEvent((int) adapter.getItemId(position), nameEvent);
             }
         });
 
@@ -396,7 +390,10 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         alert.show();
     }
 
-    private void deleteEvent(int eventCode, String nameEvent) {
+    private void removeEvent(int eventCode, String nameEvent) {
+
+        //remove event
+
         String text = getResources().getString(R.string.eventRemoved);
         text = text.replaceAll("#nameEvent#", "\"" + nameEvent + "\"");
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
@@ -429,6 +426,21 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
     }
 
     public void editEvent(View v) {
-        //crear actividad con formulario de evento y luego llamar a la función sendAttendanceEvent;
+        int position = lvEvents.getPositionForView(v);
+
+        openEventForm(getResources().getString(R.string.actionBarEditEvent),
+                eventsCode.get(position).intValue());
+    }
+
+    private void openEventForm(String titleForm, int eventCode) {
+        try {
+            Intent intent = new Intent (Rollcall.this, EventForm.class);
+            intent.putExtra("titleEventForm", titleForm);
+            intent.putExtra("attendanceEventCode", eventCode);
+            startActivityForResult(intent, Constants.EVENT_FORM_REQUEST_CODE);
+        } catch (Exception e) {
+            String errorMsg = getString(R.string.errorServerResponseMsg);
+            error(errorMsg, e, true);
+        }
     }
 }

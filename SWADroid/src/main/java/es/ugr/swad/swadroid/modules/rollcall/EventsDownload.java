@@ -19,12 +19,14 @@
 
 package es.ugr.swad.swadroid.modules.rollcall;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import org.ksoap2.serialization.SoapObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -161,6 +163,11 @@ public class EventsDownload extends Module {
             String msg = String.valueOf(numEvents) + " " + getResources().getString(R.string.eventsUpdated);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
+
+        Intent intent = new Intent();
+        intent.putExtra("eventCodes", (Serializable) eventCodes);
+
+        setResult(RESULT_OK, intent);
         finish();
     }
 
