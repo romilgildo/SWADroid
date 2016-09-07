@@ -349,5 +349,6 @@
     <string name="initialDate">Fecha inicial:</string>
     <string name="finalDate">Fecha final:</string>
     <string name="timeEvent">Hora:</string>
+    <string name="noEventTitle">Debe poner el título del evento</string>
 
 </resources>

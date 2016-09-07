@@ -352,11 +352,12 @@
     <string name="actionBarNewEvent">New event</string>
     <string name="actionBarEditEvent">Edit event</string>
     <string name="titleEvent">Title:</string>
-    <string name="descriptionEvent">Description:</string>
+    <string name="descriptionEvent">Descript
+    <string name="initialDate">Initial date:</string>
+    <string name="finalDate">Final date:</string>
+    <string name="timeEvent">Time:</string>ion:</string>
     <string name="cancelNewEventForm">You are going to cancel the new event</string>
     <string name="cancelEditEventForm">You are going to discard the changes of the event</string>
     <string name="eventCreated">Event created</string>
-    <string name="initialDate">Initial date:</string>
-    <string name="finalDate">Final date:</string>
-    <string name="timeEvent">Time:</string>
+    <string name="noEventTitle">You must enter the title of the event</string>
 </resources>

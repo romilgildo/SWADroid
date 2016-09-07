@@ -735,7 +735,7 @@ public class DataBaseHelper {
     public Cursor getEventsCourseCursor(long crsCod) {
         return db.rawQuery("SELECT * FROM " + DB_TABLE_EVENTS_ATTENDANCES + " AS E"
                 + " INNER JOIN " + DB_TABLE_EVENTS_COURSES + " AS C"
-                + " ON E.id = C.eventCode WHERE C.crsCod ='" + crsCod + "' AND hidden=" + Utils.parseBoolInt(false)
+                + " ON E.id = C.eventCode WHERE C.crsCod ='" + crsCod + "'"
                 + " ORDER BY E.startTime DESC,E.endTime DESC,E.title DESC", null);
     }
 

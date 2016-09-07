@@ -3,6 +3,9 @@ package es.ugr.swad.swadroid.modules.rollcall;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.icu.util.TimeZone;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 import org.ksoap2.serialization.SoapObject;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
@@ -44,6 +48,12 @@ public class EventForm extends Module {
     EditText initialTimeEditText;
     EditText finalTimeEditText;
 
+    int minute;
+    int hour;
+    int day;
+    int month;
+    int year;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         titleBar = getIntent().getStringExtra("titleEventForm");
@@ -59,17 +69,23 @@ public class EventForm extends Module {
         finalTimeEditText = (EditText) findViewById(R.id.finalTimeText);
 
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+2"));
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH) + 1;
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH) + 1;
+        day = c.get(Calendar.DAY_OF_MONTH);
+        hour = c.get(Calendar.HOUR_OF_DAY);
+        minute = c.get(Calendar.MINUTE);
 
         initialDateEditText.setText(day + "/" + month + "/" + year);
         finalDateEditText.setText(day + "/" + month + "/" + year);
 
-        initialTimeEditText.setText(hour + ":" + minute);
-        finalTimeEditText.setText(hour + ":" + minute);
+        if(minute  < 10) {
+            initialTimeEditText.setText(hour + ":" + "0" + minute);
+            finalTimeEditText.setText(hour + ":" + "0" + minute);
+        }
+        else {
+            initialTimeEditText.setText(hour + ":" + minute);
+            finalTimeEditText.setText(hour + ":" + minute);
+        }
 
         setMETHOD_NAME("sendAttendanceEvent");
     }
@@ -121,7 +137,10 @@ public class EventForm extends Module {
                     DialogFragment newFragment = new TimeSelector() {
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            initialTimeEditText.setText(hourOfDay + ":" + minute);
+                            if (minute < 10)
+                                initialTimeEditText.setText(hourOfDay + ":" + "0" + minute);
+                            else
+                                initialTimeEditText.setText(hourOfDay + ":" + minute);
                         }
                     };
                     newFragment.show(getFragmentManager(), "timePicker");
@@ -138,7 +157,10 @@ public class EventForm extends Module {
                     DialogFragment newFragment = new TimeSelector() {
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            finalTimeEditText.setText(hourOfDay + ":" + minute);
+                            if(minute  < 10)
+                                finalTimeEditText.setText(hourOfDay + ":" + "0" + minute);
+                            else
+                                finalTimeEditText.setText(hourOfDay + ":" + minute);
                         }
                     };
                     newFragment.show(getFragmentManager(), "timePicker");
@@ -158,7 +180,10 @@ public class EventForm extends Module {
                 showCancelDialog();
                 return true;
             case R.id.confirm_event:
-                runConnection();
+                if(titleEditText.getText().length() == 0)
+                    Toast.makeText(this, getString(R.string.noEventTitle), Toast.LENGTH_LONG).show();
+                else
+                    runConnection();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -169,12 +194,20 @@ public class EventForm extends Module {
     protected void requestService() throws Exception {
         createRequest(SOAPClient.CLIENT_TYPE);
         int attendanceEventCode = 0; //0 is new event
+
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yy hh:mm");
+        Date initialDate = formatter.parse(initialDateEditText.getText().toString() + " " + initialTimeEditText.getText().toString());
+        Date finalDate = formatter.parse(finalDateEditText.getText().toString() + " " + finalTimeEditText.getText().toString());
+
+        long startUnixTime = (long) initialDate.getTime() / 1000 - 7200;
+        long endUnixTime = (long) finalDate.getTime() / 1000 - 7200;
+
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("attendanceEventCode", attendanceEventCode);
         addParam("courseCode", Courses.getSelectedCourseCode());
         addParam("hidden", 0); //visible event
-        addParam("startTime", 0);
-        addParam("endTime", 0);
+        addParam("startTime", startUnixTime);
+        addParam("endTime", endUnixTime);
         addParam("commentsTeachersVisible", 0);
         addParam("title", titleEditText.getText().toString());
         addParam("text", descriptionEditText.getText().toString());
@@ -200,6 +233,9 @@ public class EventForm extends Module {
     @Override
     protected void postConnect() {
         Toast.makeText(this, getString(R.string.eventCreated), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent();
+        intent.putExtra("updateEvents", true);
+        setResult(RESULT_OK, intent);
         finish();
     }
 
@@ -222,6 +258,9 @@ public class EventForm extends Module {
 
         builder.setPositiveButton(getString(R.string.discardMsg), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent();
+                intent.putExtra("updateEvents", false);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });

@@ -21,6 +21,7 @@ package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -105,9 +106,13 @@ public class EventsDownload extends Module {
 
             for (int i = 0; i < numEvents; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
-
                 long attendanceEventCode = Long.parseLong(pii.getProperty("attendanceEventCode").toString());
-                boolean hidden = Utils.parseStringBool(pii.getProperty("hidden").toString());
+                boolean hidden;
+                if(pii.getProperty("hidden").toString().equals("1"))
+                    hidden = true;
+                else
+                    hidden = false;
+
                 String userSurname1 = pii.getProperty("userSurname1").toString();
                 String userSurname2 = pii.getProperty("userSurname2").toString();
                 String userFirstName = pii.getProperty("userFirstname").toString();

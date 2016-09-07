@@ -29,6 +29,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.SyncStateContract;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -192,7 +193,9 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
                 eventsCode = (List) intent.getSerializableExtra("eventsCode");
                 break;
             case Constants.EVENT_FORM_REQUEST_CODE:
-                refreshEvents();
+                boolean updateEvents = intent.getBooleanExtra("updateEvents", false);
+                if(updateEvents == true)
+                    refreshEvents();
                 break;
         }
     }

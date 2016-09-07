@@ -22,8 +22,10 @@ package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,10 +35,12 @@ import android.widget.TextView;
 import java.text.DateFormat;
 import java.util.Calendar;
 
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.FontManager;
 import es.ugr.swad.swadroid.utils.Crypto;
+import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Custom CursorAdapter for display events
@@ -50,6 +54,7 @@ public class EventsCursorAdapter extends CursorAdapter {
     private LayoutInflater inflater;
 
     private static Typeface iconFont;
+    private static final String TAG = Constants.APP_TAG + " EventsCursorAdapter";
 
     private static class ViewHolder {
         TextView iconTextView;
@@ -122,6 +127,7 @@ public class EventsCursorAdapter extends CursorAdapter {
         long startTime = cursor.getLong(cursor.getColumnIndex("startTime"));
         long endTime = cursor.getLong(cursor.getColumnIndex("endTime"));
         final boolean pending = "pending".equals(crypto.decrypt(cursor.getString(cursor.getColumnIndex("status"))));
+        boolean hidden = Utils.parseIntBool(cursor.getInt(cursor.getColumnIndex("hidden")));
         Calendar today = Calendar.getInstance();
         Calendar startTimeCalendar = Calendar.getInstance();
         Calendar endTimeCalendar = Calendar.getInstance();
@@ -170,6 +176,9 @@ public class EventsCursorAdapter extends CursorAdapter {
             holder.sendingStateTextView.setText(R.string.ok);
             holder.sendingStateTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
         }
+
+        if(hidden)
+            holder.titleTextView.setTextColor(Color.GRAY);
     }
 
     @Override
