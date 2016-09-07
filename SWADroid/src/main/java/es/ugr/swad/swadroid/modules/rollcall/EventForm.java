@@ -1,6 +1,7 @@
 package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.app.DialogFragment;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.icu.util.Calendar;
 import android.icu.util.TimeZone;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.ksoap2.serialization.SoapObject;
@@ -39,6 +41,8 @@ public class EventForm extends Module {
     EditText descriptionEditText;
     EditText initialDateEditText;
     EditText finalDateEditText;
+    EditText initialTimeEditText;
+    EditText finalTimeEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +55,21 @@ public class EventForm extends Module {
         descriptionEditText = (EditText) findViewById(R.id.description_text);
         initialDateEditText = (EditText) findViewById(R.id.initialDateText);
         finalDateEditText = (EditText) findViewById(R.id.finalDateText);
+        initialTimeEditText = (EditText) findViewById(R.id.initialTimeText);
+        finalTimeEditText = (EditText) findViewById(R.id.finalTimeText);
 
-        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+1"));
+        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+2"));
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH) + 1;
         int day = c.get(Calendar.DAY_OF_MONTH);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
 
         initialDateEditText.setText(day + "/" + month + "/" + year);
         finalDateEditText.setText(day + "/" + month + "/" + year);
+
+        initialTimeEditText.setText(hour + ":" + minute);
+        finalTimeEditText.setText(hour + ":" + minute);
 
         setMETHOD_NAME("sendAttendanceEvent");
     }
@@ -98,6 +109,40 @@ public class EventForm extends Module {
                     };
                     newFragment.show(getFragmentManager(), "datePicker");
                     finalDateEditText.clearFocus();
+                }
+            }
+        });
+
+        initialTimeEditText.setInputType(InputType.TYPE_NULL);
+        initialTimeEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    DialogFragment newFragment = new TimeSelector() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                            initialTimeEditText.setText(hourOfDay + ":" + minute);
+                        }
+                    };
+                    newFragment.show(getFragmentManager(), "timePicker");
+                    initialTimeEditText.clearFocus();
+                }
+            }
+        });
+
+        finalTimeEditText.setInputType(InputType.TYPE_NULL);
+        finalTimeEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    DialogFragment newFragment = new TimeSelector() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                            finalTimeEditText.setText(hourOfDay + ":" + minute);
+                        }
+                    };
+                    newFragment.show(getFragmentManager(), "timePicker");
+                    finalTimeEditText.clearFocus();
                 }
             }
         });

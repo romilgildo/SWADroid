@@ -7,8 +7,6 @@ import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.widget.DatePicker;
 
-import java.util.Date;
-
 /**
  * Created by Ruben Martín Hidalgo on 06/09/2016.
  */
