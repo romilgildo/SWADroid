@@ -20,6 +20,7 @@
 package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
@@ -124,6 +125,8 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
 
     private List<Long> eventsCode;
 
+    private String nameEvent;
+
     /* (non-Javadoc)
     * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
     */
@@ -197,6 +200,13 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
                 if(updateEvents == true)
                     refreshEvents();
                 break;
+            case Constants.REMOVE_EVENT_REQUEST_CODE:
+                String text = getResources().getString(R.string.eventRemoved);
+                if (resultCode == Activity.RESULT_OK && intent != null) {
+                    text = text.replaceAll("#nameEvent#", "\"" + nameEvent + "\"");
+                    Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+                    refreshEvents();
+                }
         }
     }
 
@@ -394,12 +404,12 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
     }
 
     private void removeEvent(int eventCode, String nameEvent) {
+        Intent intent = new Intent (Rollcall.this, RemoveEvent.class);
+        intent.putExtra("eventCode", eventCode);
 
-        //remove event
+        this.nameEvent = nameEvent;
 
-        String text = getResources().getString(R.string.eventRemoved);
-        text = text.replaceAll("#nameEvent#", "\"" + nameEvent + "\"");
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+        startActivityForResult(intent, Constants.REMOVE_EVENT_REQUEST_CODE);
     }
 
     public void hideEvent(View v) {
@@ -413,6 +423,8 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         showEventCurrent.setVisibility(View.GONE);
         hideEventCurrent.setVisibility(View.VISIBLE);
         nameTextView.setTextColor(Color.GRAY);
+
+        //send data of event and call Visibitily class
     }
 
     public void showEvent(View v) {

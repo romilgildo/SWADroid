@@ -236,6 +236,14 @@ public class Constants {
      */
     public static final int EVENT_FORM_REQUEST_CODE = 41;
     /**
+     * Request code for remove event
+     */
+    public static final int REMOVE_EVENT_REQUEST_CODE = 42;
+    /**
+     * Request code for visibility event
+     */
+    public static final int VISIBILITY_EVENT_REQUEST_CODE = 43;
+    /**
      * Request code for CAMERA permission
      */
     public static final int PERMISSIONS_REQUEST_CAMERA = 100;

@@ -1,17 +1,17 @@
 package es.ugr.swad.swadroid.modules.rollcall;
 
+import android.annotation.TargetApi;
 import android.app.DialogFragment;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.icu.util.TimeZone;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +22,11 @@ import android.widget.Toast;
 
 import org.ksoap2.serialization.SoapObject;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.model.Event;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
@@ -54,6 +53,7 @@ public class EventForm extends Module {
     int month;
     int year;
 
+    @TargetApi(Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         titleBar = getIntent().getStringExtra("titleEventForm");
@@ -95,6 +95,7 @@ public class EventForm extends Module {
 
         initialDateEditText.setInputType(InputType.TYPE_NULL);
         initialDateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -113,6 +114,7 @@ public class EventForm extends Module {
 
         finalDateEditText.setInputType(InputType.TYPE_NULL);
         finalDateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -131,6 +133,7 @@ public class EventForm extends Module {
 
         initialTimeEditText.setInputType(InputType.TYPE_NULL);
         initialTimeEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -151,6 +154,7 @@ public class EventForm extends Module {
 
         finalTimeEditText.setInputType(InputType.TYPE_NULL);
         finalTimeEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -190,6 +194,7 @@ public class EventForm extends Module {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
     @Override
     protected void requestService() throws Exception {
         createRequest(SOAPClient.CLIENT_TYPE);
@@ -212,7 +217,7 @@ public class EventForm extends Module {
         addParam("title", titleEditText.getText().toString());
         addParam("text", descriptionEditText.getText().toString());
         addParam("groups", "");
-        sendRequest(User.class, true);
+        sendRequest(Event.class, true);
 
         if (result != null) {
             SoapObject soap = (SoapObject) result;
