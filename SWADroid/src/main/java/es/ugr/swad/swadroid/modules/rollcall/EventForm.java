@@ -62,6 +62,7 @@ public class EventForm extends Module {
         setTitle(titleBar);
 
         titleEditText = (EditText) findViewById(R.id.name_text);
+        titleEditText.setText(getIntent().getStringExtra("title"));
         descriptionEditText = (EditText) findViewById(R.id.description_text);
         initialDateEditText = (EditText) findViewById(R.id.initialDateText);
         finalDateEditText = (EditText) findViewById(R.id.finalDateText);

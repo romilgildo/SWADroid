@@ -30,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -62,6 +63,8 @@ public class EventsCursorAdapter extends CursorAdapter {
         TextView startTimeTextView;
         TextView endTimeTextView;
         TextView sendingStateTextView;
+        ImageButton hideEvent;
+        ImageButton showEvent;
     }
 
     /**
@@ -148,6 +151,8 @@ public class EventsCursorAdapter extends CursorAdapter {
         holder.startTimeTextView = (TextView) view.findViewById(R.id.startTimeTextView);
         holder.endTimeTextView = (TextView) view.findViewById(R.id.endTimeTextView);
         holder.sendingStateTextView = (TextView) view.findViewById(R.id.sendingStateTextView);
+        holder.hideEvent = (ImageButton) view.findViewById(R.id.showEvent);
+        holder.showEvent = (ImageButton) view.findViewById(R.id.hideEvent);
 
         holder.titleTextView.setText(title);
 
@@ -161,6 +166,14 @@ public class EventsCursorAdapter extends CursorAdapter {
         } else {
             holder.startTimeTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
             holder.endTimeTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
+        }
+
+        if(hidden){
+            holder.hideEvent.setVisibility(View.GONE);
+            holder.showEvent.setVisibility(View.VISIBLE);
+        } else {
+            holder.hideEvent.setVisibility(View.VISIBLE);
+            holder.showEvent.setVisibility(View.GONE);
         }
 
         /*
@@ -179,6 +192,8 @@ public class EventsCursorAdapter extends CursorAdapter {
 
         if(hidden)
             holder.titleTextView.setTextColor(Color.GRAY);
+        else
+            holder.titleTextView.setTextColor(Color.BLACK);
     }
 
     @Override
@@ -207,4 +222,17 @@ public class EventsCursorAdapter extends CursorAdapter {
             return 0;
         }
     }
+
+    public int getHidden() {
+        return cursor.getInt(cursor.getColumnIndex("hidden"));
+    }
+
+    public long getStartTime() {
+        return cursor.getLong(cursor.getColumnIndex("startTime"));
+    }
+
+    public long getEndTime() {
+        return cursor.getLong(cursor.getColumnIndex("endTime"));
+    }
+
 }

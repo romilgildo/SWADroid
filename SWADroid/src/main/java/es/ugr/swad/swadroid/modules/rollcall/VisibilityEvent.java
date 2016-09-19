@@ -2,6 +2,7 @@ package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.os.Bundle;
 
+import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
 import es.ugr.swad.swadroid.Constants;
@@ -32,7 +33,12 @@ public class VisibilityEvent extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //recipe date of event
+        attendanceEventCode = getIntent().getIntExtra("eventCode", 0);
+        hidden = getIntent().getIntExtra("hidden", 0);
+        startUnixTime = getIntent().getLongExtra("startTime", 0);
+        endUnixTime = getIntent().getLongExtra("endTime", 0);
+        title = getIntent().getStringExtra("title");
+        description = getIntent().getStringExtra("description");
 
         setMETHOD_NAME("sendAttendanceEvent");
         getSupportActionBar().hide();
@@ -64,6 +70,16 @@ public class VisibilityEvent extends Module {
         addParam("text", description);
         addParam("groups", "");
         sendRequest(Event.class, true);
+
+        if (result != null) {
+            SoapObject soap = (SoapObject) result;
+            attendanceEventCode = Integer.parseInt(soap.getProperty("attendanceEventCode").toString());
+        }
+
+        if(attendanceEventCode > 0)
+            setResult(RESULT_OK);
+        else
+            setResult(RESULT_CANCELED);
     }
 
     @Override

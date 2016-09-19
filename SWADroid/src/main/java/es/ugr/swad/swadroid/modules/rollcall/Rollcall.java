@@ -194,6 +194,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
             case Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE:
                 refreshAdapter();
                 eventsCode = (List) intent.getSerializableExtra("eventsCode");
+
                 break;
             case Constants.EVENT_FORM_REQUEST_CODE:
                 boolean updateEvents = intent.getBooleanExtra("updateEvents", false);
@@ -205,6 +206,11 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
                 if (resultCode == Activity.RESULT_OK && intent != null) {
                     text = text.replaceAll("#nameEvent#", "\"" + nameEvent + "\"");
                     Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+                    refreshEvents();
+                }
+                break;
+            case Constants.VISIBILITY_EVENT_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK && intent != null) {
                     refreshEvents();
                 }
         }
@@ -220,7 +226,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newEvent:
-                openEventForm(getResources().getString(R.string.actionBarNewEvent), 0);
+                openEventForm(getResources().getString(R.string.actionBarNewEvent), 0, "");
                 return true;
 
             default:
@@ -424,7 +430,22 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         hideEventCurrent.setVisibility(View.VISIBLE);
         nameTextView.setTextColor(Color.GRAY);
 
-        //send data of event and call Visibitily class
+        int position = lvEvents.getPositionForView(v);
+        int eventCode = (int) adapter.getItemId(position);
+        int hidden = adapter.getHidden();
+        long startTime = adapter.getStartTime();
+        long endTime = adapter.getEndTime();
+        String title = ((TextView) layoutView.findViewById(R.id.toptext)).getText().toString();
+
+        Intent intent = new Intent (Rollcall.this, VisibilityEvent.class);
+        intent.putExtra("eventCode", eventCode);
+        intent.putExtra("hidden", hidden);
+        intent.putExtra("startTime", startTime);
+        intent.putExtra("endTime", endTime);
+        intent.putExtra("title", title);
+        intent.putExtra("description", "");
+
+        startActivityForResult(intent, Constants.VISIBILITY_EVENT_REQUEST_CODE);
     }
 
     public void showEvent(View v) {
@@ -438,20 +459,48 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         showEventCurrent.setVisibility(View.VISIBLE);
         hideEventCurrent.setVisibility(View.GONE);
         nameTextView.setTextColor(Color.BLACK);
+
+        int position = lvEvents.getPositionForView(v);
+        int eventCode = (int) adapter.getItemId(position);
+        int hidden = adapter.getHidden();
+        long startTime = adapter.getStartTime();
+        long endTime = adapter.getEndTime();
+        String title = ((TextView) layoutView.findViewById(R.id.toptext)).getText().toString();
+
+        Intent intent = new Intent (Rollcall.this, VisibilityEvent.class);
+        intent.putExtra("eventCode", eventCode);
+        intent.putExtra("hidden", hidden);
+        intent.putExtra("startTime", startTime);
+        intent.putExtra("endTime", endTime);
+        intent.putExtra("title", title);
+        intent.putExtra("description", "");
+
+        startActivityForResult(intent, Constants.VISIBILITY_EVENT_REQUEST_CODE);
     }
 
     public void editEvent(View v) {
+        View layoutView = (LinearLayout) v.getParent().getParent();
         int position = lvEvents.getPositionForView(v);
+        String title = ((TextView) layoutView.findViewById(R.id.toptext)).getText().toString();
 
         openEventForm(getResources().getString(R.string.actionBarEditEvent),
-                eventsCode.get(position).intValue());
+                (int) adapter.getItemId(position), title);
     }
 
-    private void openEventForm(String titleForm, int eventCode) {
+    private void openEventForm(String titleForm, int eventCode, String title) {
         try {
+            int hidden = adapter.getHidden();
+            long startTime = adapter.getStartTime();
+            long endTime = adapter.getEndTime();
+
             Intent intent = new Intent (Rollcall.this, EventForm.class);
             intent.putExtra("titleEventForm", titleForm);
             intent.putExtra("attendanceEventCode", eventCode);
+            intent.putExtra("hidden", hidden);
+            intent.putExtra("startTime", startTime);
+            intent.putExtra("endTime", endTime);
+            intent.putExtra("title", title);
+            intent.putExtra("description", "");
             startActivityForResult(intent, Constants.EVENT_FORM_REQUEST_CODE);
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
