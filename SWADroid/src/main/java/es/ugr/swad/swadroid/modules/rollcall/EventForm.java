@@ -22,9 +22,6 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.ksoap2.serialization.SoapObject;
@@ -54,6 +51,8 @@ public class EventForm extends Module {
     EditText initialTimeEditText;
     EditText finalTimeEditText;
 
+    int attendanceEventCode;
+
     int minute;
     int hour;
     int day;
@@ -73,52 +72,50 @@ public class EventForm extends Module {
         setContentView(R.layout.event_form);
         setTitle(titleBar);
 
+        attendanceEventCode = getIntent().getIntExtra("attendanceEventCode", 0); //0 is new event
+
         titleEditText = (EditText) findViewById(R.id.name_text);
         titleEditText.setText(getIntent().getStringExtra("title"));
         descriptionEditText = (EditText) findViewById(R.id.description_text);
-
-        Date startDate = new Date(getIntent().getLongExtra("startTime", 0)*1000L);
-        Date endDate = new Date(getIntent().getLongExtra("endTime", 0)*1000L);
-        SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
-        formatDate.setTimeZone(TimeZone.getTimeZone("GMT+2"));
-        formatTime.setTimeZone(TimeZone.getTimeZone("GMT+2"));
-
         initialDateEditText = (EditText) findViewById(R.id.initialDateText);
-        initialDateEditText.setText(formatDate.format(startDate));
-
         initialTimeEditText = (EditText) findViewById(R.id.initialTimeText);
-        initialTimeEditText.setText(formatTime.format(startDate));
-
         finalDateEditText = (EditText) findViewById(R.id.finalDateText);
-        finalDateEditText.setText(formatDate.format(endDate));
-
         finalTimeEditText = (EditText) findViewById(R.id.finalTimeText);
-        finalTimeEditText.setText(formatTime.format(endDate));
 
-        /*
-        c = Calendar.getInstance(TimeZone.getTimeZone("GMT+2"));
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH) + 1;
-        day = c.get(Calendar.DAY_OF_MONTH);
-        hour = c.get(Calendar.HOUR_OF_DAY);
-        minute = c.get(Calendar.MINUTE);
+        if(attendanceEventCode != 0){
+            Date startDate = new Date(getIntent().getLongExtra("startTime", 0)*1000L);
+            Date endDate = new Date(getIntent().getLongExtra("endTime", 0)*1000L);
+            SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
+            formatDate.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+            formatTime.setTimeZone(TimeZone.getTimeZone("GMT+2"));
 
-        initialDateEditText.setText(day + "/" + month + "/" + year);
-        finalDateEditText.setText(day + "/" + month + "/" + year);
+            initialDateEditText.setText(formatDate.format(startDate));
+            initialTimeEditText.setText(formatTime.format(startDate));
+            finalDateEditText.setText(formatDate.format(endDate));
+            finalTimeEditText.setText(formatTime.format(endDate));
 
-        if (minute < 10) {
-            initialTimeEditText.setText(hour + ":" + "0" + minute);
-            finalTimeEditText.setText(hour + ":" + "0" + minute);
-        } else {
-            initialTimeEditText.setText(hour + ":" + minute);
-            finalTimeEditText.setText(hour + ":" + minute);
+        }else{
+            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+2"));
+            year = c.get(Calendar.YEAR);
+            month = c.get(Calendar.MONTH) + 1;
+            day = c.get(Calendar.DAY_OF_MONTH);
+            hour = c.get(Calendar.HOUR_OF_DAY);
+            minute = c.get(Calendar.MINUTE);
+
+            initialDateEditText.setText(day + "/" + month + "/" + year);
+            finalDateEditText.setText(day + "/" + month + "/" + year);
+
+            if (minute < 10) {
+                initialTimeEditText.setText(hour + ":" + "0" + minute);
+                finalTimeEditText.setText(hour + ":" + "0" + minute);
+            } else {
+                initialTimeEditText.setText(hour + ":" + minute);
+                finalTimeEditText.setText(hour + ":" + minute);
+            }
         }
-        */
+
         setMETHOD_NAME("sendAttendanceEvent");
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -228,7 +225,6 @@ public class EventForm extends Module {
     @Override
     protected void requestService() throws Exception {
         createRequest(SOAPClient.CLIENT_TYPE);
-        int attendanceEventCode = getIntent().getIntExtra("attendanceEventCode", 0); //0 is new event
 
         DateFormat formatter = new SimpleDateFormat("dd/MM/yy hh:mm");
         Date initialDate = formatter.parse(initialDateEditText.getText().toString() + " " + initialTimeEditText.getText().toString());
@@ -304,39 +300,13 @@ public class EventForm extends Module {
         alert.show();
     }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("EventForm Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
-
     @Override
     public void onStart() {
         super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
     }
 }
