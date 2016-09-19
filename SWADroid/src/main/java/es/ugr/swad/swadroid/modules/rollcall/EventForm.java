@@ -58,11 +58,6 @@ public class EventForm extends Module {
     int day;
     int month;
     int year;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
     @TargetApi(Build.VERSION_CODES.N)
     @Override
@@ -96,6 +91,7 @@ public class EventForm extends Module {
             finalTimeEditText.setText(formatTime.format(endDate));
 
         }else{
+            /*
             Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+2"));
             year = c.get(Calendar.YEAR);
             month = c.get(Calendar.MONTH) + 1;
@@ -113,6 +109,7 @@ public class EventForm extends Module {
                 initialTimeEditText.setText(hour + ":" + minute);
                 finalTimeEditText.setText(hour + ":" + minute);
             }
+            */
         }
 
         setMETHOD_NAME("sendAttendanceEvent");
