@@ -123,8 +123,6 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
     */
     private ProgressScreen mProgressScreen;
 
-    private List<Long> eventsCode;
-
     private String nameEvent;
 
     /* (non-Javadoc)
@@ -193,8 +191,6 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         switch (requestCode) {
             case Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE:
                 refreshAdapter();
-                eventsCode = (List) intent.getSerializableExtra("eventsCode");
-
                 break;
             case Constants.EVENT_FORM_REQUEST_CODE:
                 boolean updateEvents = intent.getBooleanExtra("updateEvents", false);
@@ -203,14 +199,15 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
                 break;
             case Constants.REMOVE_EVENT_REQUEST_CODE:
                 String text = getResources().getString(R.string.eventRemoved);
-                if (resultCode == Activity.RESULT_OK && intent != null) {
+
+                if (resultCode == Activity.RESULT_OK) {
                     text = text.replaceAll("#nameEvent#", "\"" + nameEvent + "\"");
                     Toast.makeText(this, text, Toast.LENGTH_LONG).show();
                     refreshEvents();
                 }
                 break;
             case Constants.VISIBILITY_EVENT_REQUEST_CODE:
-                if (resultCode == Activity.RESULT_OK && intent != null) {
+                if (resultCode == Activity.RESULT_OK) {
                     refreshEvents();
                 }
         }
@@ -482,9 +479,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         View layoutView = (LinearLayout) v.getParent().getParent();
         int position = lvEvents.getPositionForView(v);
         String title = ((TextView) layoutView.findViewById(R.id.toptext)).getText().toString();
-
-        openEventForm(getResources().getString(R.string.actionBarEditEvent),
-                (int) adapter.getItemId(position), title);
+        openEventForm(getResources().getString(R.string.actionBarEditEvent), (int) adapter.getItemId(position), title);
     }
 
     private void openEventForm(String titleForm, int eventCode, String title) {

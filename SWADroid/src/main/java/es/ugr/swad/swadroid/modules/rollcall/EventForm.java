@@ -8,10 +8,12 @@ import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.icu.util.TimeZone;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +21,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.ksoap2.serialization.SoapObject;
 
@@ -52,6 +59,11 @@ public class EventForm extends Module {
     int day;
     int month;
     int year;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @TargetApi(Build.VERSION_CODES.N)
     @Override
@@ -64,12 +76,28 @@ public class EventForm extends Module {
         titleEditText = (EditText) findViewById(R.id.name_text);
         titleEditText.setText(getIntent().getStringExtra("title"));
         descriptionEditText = (EditText) findViewById(R.id.description_text);
-        initialDateEditText = (EditText) findViewById(R.id.initialDateText);
-        finalDateEditText = (EditText) findViewById(R.id.finalDateText);
-        initialTimeEditText = (EditText) findViewById(R.id.initialTimeText);
-        finalTimeEditText = (EditText) findViewById(R.id.finalTimeText);
 
-        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+2"));
+        Date startDate = new Date(getIntent().getLongExtra("startTime", 0)*1000L);
+        Date endDate = new Date(getIntent().getLongExtra("endTime", 0)*1000L);
+        SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
+        formatDate.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+        formatTime.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+
+        initialDateEditText = (EditText) findViewById(R.id.initialDateText);
+        initialDateEditText.setText(formatDate.format(startDate));
+
+        initialTimeEditText = (EditText) findViewById(R.id.initialTimeText);
+        initialTimeEditText.setText(formatTime.format(startDate));
+
+        finalDateEditText = (EditText) findViewById(R.id.finalDateText);
+        finalDateEditText.setText(formatDate.format(endDate));
+
+        finalTimeEditText = (EditText) findViewById(R.id.finalTimeText);
+        finalTimeEditText.setText(formatTime.format(endDate));
+
+        /*
+        c = Calendar.getInstance(TimeZone.getTimeZone("GMT+2"));
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH) + 1;
         day = c.get(Calendar.DAY_OF_MONTH);
@@ -79,16 +107,18 @@ public class EventForm extends Module {
         initialDateEditText.setText(day + "/" + month + "/" + year);
         finalDateEditText.setText(day + "/" + month + "/" + year);
 
-        if(minute  < 10) {
+        if (minute < 10) {
             initialTimeEditText.setText(hour + ":" + "0" + minute);
             finalTimeEditText.setText(hour + ":" + "0" + minute);
-        }
-        else {
+        } else {
             initialTimeEditText.setText(hour + ":" + minute);
             finalTimeEditText.setText(hour + ":" + minute);
         }
-
+        */
         setMETHOD_NAME("sendAttendanceEvent");
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -162,7 +192,7 @@ public class EventForm extends Module {
                     DialogFragment newFragment = new TimeSelector() {
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            if(minute  < 10)
+                            if (minute < 10)
                                 finalTimeEditText.setText(hourOfDay + ":" + "0" + minute);
                             else
                                 finalTimeEditText.setText(hourOfDay + ":" + minute);
@@ -177,7 +207,6 @@ public class EventForm extends Module {
         return super.onCreateOptionsMenu(menu);
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -185,7 +214,7 @@ public class EventForm extends Module {
                 showCancelDialog();
                 return true;
             case R.id.confirm_event:
-                if(titleEditText.getText().length() == 0)
+                if (titleEditText.getText().length() == 0)
                     Toast.makeText(this, getString(R.string.noEventTitle), Toast.LENGTH_LONG).show();
                 else
                     runConnection();
@@ -199,7 +228,7 @@ public class EventForm extends Module {
     @Override
     protected void requestService() throws Exception {
         createRequest(SOAPClient.CLIENT_TYPE);
-        int attendanceEventCode = 0; //0 is new event
+        int attendanceEventCode = getIntent().getIntExtra("attendanceEventCode", 0); //0 is new event
 
         DateFormat formatter = new SimpleDateFormat("dd/MM/yy hh:mm");
         Date initialDate = formatter.parse(initialDateEditText.getText().toString() + " " + initialTimeEditText.getText().toString());
@@ -225,7 +254,7 @@ public class EventForm extends Module {
             attendanceEventCode = Integer.parseInt(soap.getProperty("attendanceEventCode").toString());
         }
 
-        if(attendanceEventCode > 0)
+        if (attendanceEventCode > 0)
             setResult(RESULT_OK);
         else
             setResult(RESULT_CANCELED);
@@ -249,10 +278,10 @@ public class EventForm extends Module {
     protected void onError() {
     }
 
-    private void showCancelDialog(){
+    private void showCancelDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(EventForm.this);
         builder.setTitle(R.string.areYouSure);
-        if(titleBar.equals(R.string.actionBarNewEvent))
+        if (titleBar.equals(R.string.actionBarNewEvent))
             builder.setMessage(R.string.cancelNewEventForm);
         else
             builder.setMessage(R.string.cancelEditEventForm);
@@ -275,4 +304,39 @@ public class EventForm extends Module {
         alert.show();
     }
 
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("EventForm Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
 }
