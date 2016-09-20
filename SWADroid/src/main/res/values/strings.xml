@@ -360,4 +360,5 @@
     <string name="cancelEditEventForm">You are going to discard the changes of the event</string>
     <string name="eventCreated">Event created</string>
     <string name="noEventTitle">You must enter the title of the event</string>
+    <string name="eventEdited">Event edited</string>
 </resources>

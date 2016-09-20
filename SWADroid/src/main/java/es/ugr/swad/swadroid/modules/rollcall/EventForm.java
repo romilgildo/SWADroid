@@ -1,16 +1,16 @@
 package es.ugr.swad.swadroid.modules.rollcall;
 
-import android.annotation.TargetApi;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.text.DateFormat;
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
-import android.icu.util.TimeZone;
-import android.net.Uri;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.util.Log;
@@ -22,10 +22,8 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import org.ksoap2.serialization.SoapObject;
-
+import java.text.ParseException;
 import java.util.Date;
 
 import es.ugr.swad.swadroid.Constants;
@@ -59,7 +57,9 @@ public class EventForm extends Module {
     int month;
     int year;
 
-    @TargetApi(Build.VERSION_CODES.N)
+    String messageEvent;
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         titleBar = getIntent().getStringExtra("titleEventForm");
@@ -77,13 +77,14 @@ public class EventForm extends Module {
         finalDateEditText = (EditText) findViewById(R.id.finalDateText);
         finalTimeEditText = (EditText) findViewById(R.id.finalTimeText);
 
+        SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
+        formatDate.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+        formatTime.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+
         if(attendanceEventCode != 0){
             Date startDate = new Date(getIntent().getLongExtra("startTime", 0)*1000L);
             Date endDate = new Date(getIntent().getLongExtra("endTime", 0)*1000L);
-            SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
-            formatDate.setTimeZone(TimeZone.getTimeZone("GMT+2"));
-            formatTime.setTimeZone(TimeZone.getTimeZone("GMT+2"));
 
             initialDateEditText.setText(formatDate.format(startDate));
             initialTimeEditText.setText(formatTime.format(startDate));
@@ -91,25 +92,15 @@ public class EventForm extends Module {
             finalTimeEditText.setText(formatTime.format(endDate));
 
         }else{
-            /*
-            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+2"));
-            year = c.get(Calendar.YEAR);
-            month = c.get(Calendar.MONTH) + 1;
-            day = c.get(Calendar.DAY_OF_MONTH);
-            hour = c.get(Calendar.HOUR_OF_DAY);
-            minute = c.get(Calendar.MINUTE);
-
-            initialDateEditText.setText(day + "/" + month + "/" + year);
-            finalDateEditText.setText(day + "/" + month + "/" + year);
-
-            if (minute < 10) {
-                initialTimeEditText.setText(hour + ":" + "0" + minute);
-                finalTimeEditText.setText(hour + ":" + "0" + minute);
-            } else {
-                initialTimeEditText.setText(hour + ":" + minute);
-                finalTimeEditText.setText(hour + ":" + minute);
-            }
-            */
+            String startDate = formatDate.format(System.currentTimeMillis());
+            String startTime = formatTime.format(System.currentTimeMillis());
+            //two hours later
+            String endDate = formatDate.format(System.currentTimeMillis() + 7200 * 1000L);
+            String endTime = formatTime.format(System.currentTimeMillis() + 7200 * 1000L);
+            initialDateEditText.setText(startDate);
+            initialTimeEditText.setText(startTime);
+            finalDateEditText.setText(endDate);
+            finalTimeEditText.setText(endTime);
         }
 
         setMETHOD_NAME("sendAttendanceEvent");
@@ -120,11 +111,21 @@ public class EventForm extends Module {
 
         initialDateEditText.setInputType(InputType.TYPE_NULL);
         initialDateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    DialogFragment newFragment = new DateSelector() {
+                    try {
+                        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+1"));
+                        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(initialDateEditText.getText().toString());
+                        c.setTime(date);
+                        day = c.get(Calendar.DAY_OF_MONTH) + 1;
+                        month = c.get(Calendar.MONTH);
+                        year = c.get(Calendar.YEAR);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    DialogFragment newFragment = new DateSelector(day, month, year) {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int day) {
                             int finalMonth = month + 1;
@@ -139,11 +140,21 @@ public class EventForm extends Module {
 
         finalDateEditText.setInputType(InputType.TYPE_NULL);
         finalDateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    DialogFragment newFragment = new DateSelector() {
+                    try {
+                        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+1"));
+                        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(finalDateEditText.getText().toString());
+                        c.setTime(date);
+                        day = c.get(Calendar.DAY_OF_MONTH) + 1;
+                        month = c.get(Calendar.MONTH);
+                        year = c.get(Calendar.YEAR);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    DialogFragment newFragment = new DateSelector(day, month, year) {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int day) {
                             int finalMonth = month + 1;
@@ -158,11 +169,20 @@ public class EventForm extends Module {
 
         initialTimeEditText.setInputType(InputType.TYPE_NULL);
         initialTimeEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    DialogFragment newFragment = new TimeSelector() {
+                    try {
+                        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+1"));
+                        Date time = new SimpleDateFormat("HH:mm").parse(initialTimeEditText.getText().toString());
+                        c.setTime(time);
+                        hour = c.get(Calendar.HOUR_OF_DAY);
+                        minute = c.get(Calendar.MINUTE);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    DialogFragment newFragment = new TimeSelector(hour, minute) {
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                             if (minute < 10)
@@ -179,11 +199,20 @@ public class EventForm extends Module {
 
         finalTimeEditText.setInputType(InputType.TYPE_NULL);
         finalTimeEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    DialogFragment newFragment = new TimeSelector() {
+                    try {
+                        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+1"));
+                        Date time = new SimpleDateFormat("HH:mm").parse(finalTimeEditText.getText().toString());
+                        c.setTime(time);
+                        hour = c.get(Calendar.HOUR_OF_DAY);
+                        minute = c.get(Calendar.MINUTE);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    DialogFragment newFragment = new TimeSelector(hour, minute) {
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                             if (minute < 10)
@@ -218,7 +247,7 @@ public class EventForm extends Module {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void requestService() throws Exception {
         createRequest(SOAPClient.CLIENT_TYPE);
@@ -227,8 +256,8 @@ public class EventForm extends Module {
         Date initialDate = formatter.parse(initialDateEditText.getText().toString() + " " + initialTimeEditText.getText().toString());
         Date finalDate = formatter.parse(finalDateEditText.getText().toString() + " " + finalTimeEditText.getText().toString());
 
-        long startUnixTime = (long) initialDate.getTime() / 1000 - 7200;
-        long endUnixTime = (long) finalDate.getTime() / 1000 - 7200;
+        long startUnixTime = (long) initialDate.getTime() / 1000;
+        long endUnixTime = (long) finalDate.getTime() / 1000;
 
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("attendanceEventCode", attendanceEventCode);
@@ -244,6 +273,10 @@ public class EventForm extends Module {
 
         if (result != null) {
             SoapObject soap = (SoapObject) result;
+            if (attendanceEventCode == 0)
+                messageEvent = getString(R.string.eventCreated);
+            else
+                messageEvent = getString(R.string.eventEdited);
             attendanceEventCode = Integer.parseInt(soap.getProperty("attendanceEventCode").toString());
         }
 
@@ -260,7 +293,7 @@ public class EventForm extends Module {
 
     @Override
     protected void postConnect() {
-        Toast.makeText(this, getString(R.string.eventCreated), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, messageEvent, Toast.LENGTH_LONG).show();
         Intent intent = new Intent();
         intent.putExtra("updateEvents", true);
         setResult(RESULT_OK, intent);
