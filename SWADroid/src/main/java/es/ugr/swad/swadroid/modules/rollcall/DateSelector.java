@@ -1,5 +1,6 @@
 package es.ugr.swad.swadroid.modules.rollcall;
 
+import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -13,7 +14,7 @@ import android.widget.DatePicker;
 /**
  * Created by Ruben Martín Hidalgo on 06/09/2016.
  */
-@RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class DateSelector extends DialogFragment implements DatePickerDialog.OnDateSetListener {
     int year;
     int month;
