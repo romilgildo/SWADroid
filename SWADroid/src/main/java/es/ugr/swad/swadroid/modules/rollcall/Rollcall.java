@@ -487,6 +487,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
             int hidden = adapter.getHidden();
             long startTime = adapter.getStartTime();
             long endTime = adapter.getEndTime();
+            String text = adapter.getText();
 
             Intent intent = new Intent (Rollcall.this, EventForm.class);
             intent.putExtra("titleEventForm", titleForm);
@@ -495,7 +496,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
             intent.putExtra("startTime", startTime);
             intent.putExtra("endTime", endTime);
             intent.putExtra("title", title);
-            intent.putExtra("description", "");
+            intent.putExtra("text", text);
             startActivityForResult(intent, Constants.EVENT_FORM_REQUEST_CODE);
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);

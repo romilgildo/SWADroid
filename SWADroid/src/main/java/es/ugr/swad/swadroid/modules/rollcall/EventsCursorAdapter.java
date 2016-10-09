@@ -55,7 +55,7 @@ public class EventsCursorAdapter extends CursorAdapter {
     private LayoutInflater inflater;
 
     private static Typeface iconFont;
-    private static final String TAG = Constants.APP_TAG + " EventsCursorAdapter";
+    private static final String TAG = Constants.APP_TAG + " EventsAdapter";
 
     private static class ViewHolder {
         TextView iconTextView;
@@ -233,6 +233,10 @@ public class EventsCursorAdapter extends CursorAdapter {
 
     public long getEndTime() {
         return cursor.getLong(cursor.getColumnIndex("endTime"));
+    }
+
+    public String getText() {
+        return crypto.decrypt(cursor.getString(cursor.getColumnIndex("text")));
     }
 
 }

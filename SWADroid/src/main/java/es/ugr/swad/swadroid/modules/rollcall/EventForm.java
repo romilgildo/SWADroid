@@ -13,8 +13,6 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -74,6 +72,7 @@ public class EventForm extends Module {
         titleEditText = (EditText) findViewById(R.id.name_text);
         titleEditText.setText(getIntent().getStringExtra("title"));
         descriptionEditText = (EditText) findViewById(R.id.description_text);
+        descriptionEditText.setText(getIntent().getStringExtra("text"));
         initialDateEditText = (EditText) findViewById(R.id.initialDateText);
         initialTimeEditText = (EditText) findViewById(R.id.initialTimeText);
         finalDateEditText = (EditText) findViewById(R.id.finalDateText);
