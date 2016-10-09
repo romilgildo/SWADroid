@@ -51,6 +51,7 @@ public class EventForm extends Module {
     EditText finalTimeEditText;
 
     int attendanceEventCode;
+    int hidden;
 
     int minute;
     int hour;
@@ -103,6 +104,8 @@ public class EventForm extends Module {
             finalDateEditText.setText(endDate);
             finalTimeEditText.setText(endTime);
         }
+
+        hidden = getIntent().getIntExtra("hidden", 0);
 
         setMETHOD_NAME("sendAttendanceEvent");
     }
@@ -263,7 +266,7 @@ public class EventForm extends Module {
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("attendanceEventCode", attendanceEventCode);
         addParam("courseCode", Courses.getSelectedCourseCode());
-        addParam("hidden", 0); //visible event
+        addParam("hidden", hidden); //visible event
         addParam("startTime", startUnixTime);
         addParam("endTime", endUnixTime);
         addParam("commentsTeachersVisible", 0);
