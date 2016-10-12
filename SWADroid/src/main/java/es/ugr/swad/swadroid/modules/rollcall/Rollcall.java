@@ -433,6 +433,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         long startTime = adapter.getStartTime();
         long endTime = adapter.getEndTime();
         String title = ((TextView) layoutView.findViewById(R.id.toptext)).getText().toString();
+        String text = adapter.getText();
 
         Intent intent = new Intent (Rollcall.this, VisibilityEvent.class);
         intent.putExtra("eventCode", eventCode);
@@ -440,7 +441,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         intent.putExtra("startTime", startTime);
         intent.putExtra("endTime", endTime);
         intent.putExtra("title", title);
-        intent.putExtra("description", "");
+        intent.putExtra("text", text);
 
         startActivityForResult(intent, Constants.VISIBILITY_EVENT_REQUEST_CODE);
     }
@@ -463,6 +464,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         long startTime = adapter.getStartTime();
         long endTime = adapter.getEndTime();
         String title = ((TextView) layoutView.findViewById(R.id.toptext)).getText().toString();
+        String text = adapter.getText();
 
         Intent intent = new Intent (Rollcall.this, VisibilityEvent.class);
         intent.putExtra("eventCode", eventCode);
@@ -470,7 +472,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         intent.putExtra("startTime", startTime);
         intent.putExtra("endTime", endTime);
         intent.putExtra("title", title);
-        intent.putExtra("description", "");
+        intent.putExtra("text", text);
 
         startActivityForResult(intent, Constants.VISIBILITY_EVENT_REQUEST_CODE);
     }

@@ -27,7 +27,7 @@ public class VisibilityEvent extends Module {
     private long startUnixTime;
     private long endUnixTime;
     private String title;
-    private String description;
+    private String text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class VisibilityEvent extends Module {
         startUnixTime = getIntent().getLongExtra("startTime", 0);
         endUnixTime = getIntent().getLongExtra("endTime", 0);
         title = getIntent().getStringExtra("title");
-        description = getIntent().getStringExtra("description");
+        text = getIntent().getStringExtra("text");
 
         setMETHOD_NAME("sendAttendanceEvent");
         getSupportActionBar().hide();
@@ -67,7 +67,7 @@ public class VisibilityEvent extends Module {
         addParam("endTime", endUnixTime);
         addParam("commentsTeachersVisible", 0);
         addParam("title", title);
-        addParam("text", description);
+        addParam("text", text);
         addParam("groups", "");
         sendRequest(Event.class, true);
 
