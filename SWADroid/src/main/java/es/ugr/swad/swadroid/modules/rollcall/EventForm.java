@@ -13,11 +13,14 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -47,6 +50,10 @@ public class EventForm extends Module {
     EditText finalDateEditText;
     EditText initialTimeEditText;
     EditText finalTimeEditText;
+    TextView allGroupsTitle;
+    CheckBox allGroupsCheckbox;
+    TextView hideCommentsTitle;
+    CheckBox hideCommentsCheckbox;
 
     int attendanceEventCode;
     int hidden;
@@ -77,6 +84,10 @@ public class EventForm extends Module {
         initialTimeEditText = (EditText) findViewById(R.id.initialTimeText);
         finalDateEditText = (EditText) findViewById(R.id.finalDateText);
         finalTimeEditText = (EditText) findViewById(R.id.finalTimeText);
+        allGroupsTitle = (TextView) findViewById(R.id.text_allGroups);
+        allGroupsCheckbox = (CheckBox) findViewById(R.id.check_allGroups);
+        hideCommentsTitle = (TextView) findViewById(R.id.text_hideComments);
+        hideCommentsCheckbox = (CheckBox) findViewById(R.id.check_hideComments);
 
         SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
@@ -229,6 +240,12 @@ public class EventForm extends Module {
                 }
             }
         });
+
+        hideCommentsCheckbox.setChecked(Boolean.TRUE);
+        hideCommentsTitle.setText(getResources().getString(R.string.hideComments));
+        allGroupsCheckbox.setChecked(Boolean.TRUE);
+        String text = getResources().getString(R.string.allGroups).toString().replace("##subjectName##", Courses.getSelectedCourseShortName());
+        allGroupsTitle.setText(text);
 
         return super.onCreateOptionsMenu(menu);
     }

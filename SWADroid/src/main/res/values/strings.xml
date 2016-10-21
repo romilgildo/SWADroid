@@ -363,4 +363,6 @@
     <string name="eventCreated">Event created</string>
     <string name="noEventTitle">You must enter the title of the event</string>
     <string name="eventEdited">Event edited</string>
+    <string name="allGroups">All the ##subjectName## subject</string>
+    <string name="hideComments">Hide comments of teachers</string>
 </resources>
