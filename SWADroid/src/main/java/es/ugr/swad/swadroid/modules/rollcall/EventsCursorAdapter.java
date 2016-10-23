@@ -34,7 +34,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
@@ -228,11 +230,15 @@ public class EventsCursorAdapter extends CursorAdapter {
     }
 
     public long getStartTime() {
-        return cursor.getLong(cursor.getColumnIndex("startTime"));
+        long startTime = cursor.getLong(cursor.getColumnIndex("startTime"));
+
+        return startTime;
     }
 
     public long getEndTime() {
-        return cursor.getLong(cursor.getColumnIndex("endTime"));
+        long endTime = cursor.getLong(cursor.getColumnIndex("endTime"));
+
+        return endTime;
     }
 
     public String getText() {

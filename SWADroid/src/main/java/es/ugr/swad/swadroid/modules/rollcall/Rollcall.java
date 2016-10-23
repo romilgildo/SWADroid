@@ -47,6 +47,9 @@ import android.widget.Toast;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
@@ -491,12 +494,22 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
             long endTime = adapter.getEndTime();
             String text = adapter.getText();
 
+            Calendar startTimeCalendar = Calendar.getInstance();
+            startTimeCalendar.setTimeInMillis(startTime * 1000L);
+            Calendar endTimeCalendar = Calendar.getInstance();
+            endTimeCalendar.setTimeInMillis(endTime * 1000L);
+
+            SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
+
             Intent intent = new Intent (Rollcall.this, EventForm.class);
             intent.putExtra("titleEventForm", titleForm);
             intent.putExtra("attendanceEventCode", eventCode);
             intent.putExtra("hidden", hidden);
-            intent.putExtra("startTime", startTime);
-            intent.putExtra("endTime", endTime);
+            intent.putExtra("startDate", formatDate.format(startTimeCalendar.getTime()));
+            intent.putExtra("endDate", formatDate.format(endTimeCalendar.getTime()));
+            intent.putExtra("startTime", formatTime.format(startTimeCalendar.getTime()));
+            intent.putExtra("endTime", formatTime.format(endTimeCalendar.getTime()));
             intent.putExtra("title", title);
             intent.putExtra("text", text);
             startActivityForResult(intent, Constants.EVENT_FORM_REQUEST_CODE);

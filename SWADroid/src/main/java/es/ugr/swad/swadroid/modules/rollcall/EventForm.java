@@ -89,26 +89,26 @@ public class EventForm extends Module {
         hideCommentsTitle = (TextView) findViewById(R.id.text_hideComments);
         hideCommentsCheckbox = (CheckBox) findViewById(R.id.check_hideComments);
 
-        SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
-        formatDate.setTimeZone(TimeZone.getTimeZone("GMT+2"));
-        formatTime.setTimeZone(TimeZone.getTimeZone("GMT+2"));
-
         if(attendanceEventCode != 0){
-            Date startDate = new Date(getIntent().getLongExtra("startTime", 0)*1000L);
-            Date endDate = new Date(getIntent().getLongExtra("endTime", 0)*1000L);
+            initialDateEditText.setText(getIntent().getStringExtra("startDate"));
+            initialTimeEditText.setText(getIntent().getStringExtra("startTime"));
+            finalDateEditText.setText(getIntent().getStringExtra("endDate"));
+            finalTimeEditText.setText(getIntent().getStringExtra("endTime"));
 
-            initialDateEditText.setText(formatDate.format(startDate));
-            initialTimeEditText.setText(formatTime.format(startDate));
-            finalDateEditText.setText(formatDate.format(endDate));
-            finalTimeEditText.setText(formatTime.format(endDate));
+        }else{ //new event
+            Calendar startTimeCalendar = Calendar.getInstance();
+            startTimeCalendar.setTimeInMillis(System.currentTimeMillis());
+            Calendar endTimeCalendar = Calendar.getInstance();
+            endTimeCalendar.setTimeInMillis(System.currentTimeMillis() + 7200 * 1000L);
 
-        }else{
-            String startDate = formatDate.format(System.currentTimeMillis());
-            String startTime = formatTime.format(System.currentTimeMillis());
+            SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
+
+            String startDate = formatDate.format(startTimeCalendar.getTime());
+            String startTime = formatTime.format(startTimeCalendar.getTime());
             //two hours later
-            String endDate = formatDate.format(System.currentTimeMillis() + 7200 * 1000L);
-            String endTime = formatTime.format(System.currentTimeMillis() + 7200 * 1000L);
+            String endDate = formatDate.format(endTimeCalendar.getTime());
+            String endTime = formatTime.format(endTimeCalendar.getTime());
             initialDateEditText.setText(startDate);
             initialTimeEditText.setText(startTime);
             finalDateEditText.setText(endDate);
