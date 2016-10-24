@@ -54,6 +54,7 @@ import java.util.List;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
@@ -87,7 +88,6 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         */
         Cursor dbCursor = dbHelper.getEventsCourseCursor(Courses.getSelectedCourseCode());
         startManagingCursor(dbCursor);
-
 
                 /*
                  * If there aren't events to show, hide the events lvEvents
@@ -493,6 +493,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
             long startTime = adapter.getStartTime();
             long endTime = adapter.getEndTime();
             String text = adapter.getText();
+            int comments = adapter.getCommentsVisible();
 
             Calendar startTimeCalendar = Calendar.getInstance();
             startTimeCalendar.setTimeInMillis(startTime * 1000L);
@@ -512,6 +513,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
             intent.putExtra("endTime", formatTime.format(endTimeCalendar.getTime()));
             intent.putExtra("title", title);
             intent.putExtra("text", text);
+            intent.putExtra("commentsVisible", comments);
             startActivityForResult(intent, Constants.EVENT_FORM_REQUEST_CODE);
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);

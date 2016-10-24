@@ -57,6 +57,7 @@ public class EventForm extends Module {
 
     int attendanceEventCode;
     int hidden;
+    int comments;
 
     int minute;
     int hour;
@@ -116,6 +117,7 @@ public class EventForm extends Module {
         }
 
         hidden = getIntent().getIntExtra("hidden", 0);
+        comments = getIntent().getIntExtra("commentsVisible", 0);
 
         setMETHOD_NAME("sendAttendanceEvent");
     }
@@ -241,8 +243,12 @@ public class EventForm extends Module {
             }
         });
 
-        hideCommentsCheckbox.setChecked(Boolean.TRUE);
+        if(comments == 0)
+            hideCommentsCheckbox.setChecked(Boolean.TRUE);
+        else
+            hideCommentsCheckbox.setChecked(Boolean.FALSE);
         hideCommentsTitle.setText(getResources().getString(R.string.hideComments));
+
         allGroupsCheckbox.setChecked(Boolean.TRUE);
         String text = getResources().getString(R.string.allGroups).toString().replace("##subjectName##", Courses.getSelectedCourseShortName());
         allGroupsTitle.setText(text);

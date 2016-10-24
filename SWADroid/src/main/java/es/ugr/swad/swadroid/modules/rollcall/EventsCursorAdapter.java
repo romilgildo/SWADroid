@@ -241,6 +241,10 @@ public class EventsCursorAdapter extends CursorAdapter {
         return endTime;
     }
 
+    public int getCommentsVisible() {
+        return cursor.getInt(cursor.getColumnIndex("commentsTeachersVisible"));
+    }
+
     public String getText() {
         return crypto.decrypt(cursor.getString(cursor.getColumnIndex("text")));
     }

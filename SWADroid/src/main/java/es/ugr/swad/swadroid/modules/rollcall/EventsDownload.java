@@ -119,7 +119,14 @@ public class EventsDownload extends Module {
                 String userPhoto = pii.getProperty("userPhoto").toString();
                 int startTime = Integer.parseInt(pii.getProperty("startTime").toString());
                 int endTime = Integer.parseInt(pii.getProperty("endTime").toString());
-                boolean commentsTeachersVisible = Utils.parseStringBool(pii.getProperty("commentsTeachersVisible").toString());
+
+                //boolean commentsTeachersVisible = Utils.parseStringBool(pii.getProperty("commentsTeachersVisible").toString());
+                boolean commentsTeachersVisible;
+                if(pii.getProperty("commentsTeachersVisible").toString().equals("1"))
+                    commentsTeachersVisible = true;
+                else
+                    commentsTeachersVisible = false;
+
                 String title = pii.getProperty("title").toString();
                 String text = pii.getProperty("text").toString();
                 String groups = (pii.hasProperty("groups")? pii.getProperty("groups").toString() : "");
