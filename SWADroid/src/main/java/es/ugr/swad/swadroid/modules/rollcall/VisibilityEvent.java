@@ -24,6 +24,7 @@ public class VisibilityEvent extends Module {
     private static final String TAG = Constants.APP_TAG + " VisibilityEvent";
     private int attendanceEventCode;
     private int hidden;
+    private int comments;
     private long startUnixTime;
     private long endUnixTime;
     private String title;
@@ -39,6 +40,7 @@ public class VisibilityEvent extends Module {
         endUnixTime = getIntent().getLongExtra("endTime", 0);
         title = getIntent().getStringExtra("title");
         text = getIntent().getStringExtra("text");
+        comments = getIntent().getIntExtra("commentsVisible", 0);
 
         setMETHOD_NAME("sendAttendanceEvent");
         getSupportActionBar().hide();
@@ -65,7 +67,7 @@ public class VisibilityEvent extends Module {
         addParam("hidden", hidden); //visibility event
         addParam("startTime", startUnixTime);
         addParam("endTime", endUnixTime);
-        addParam("commentsTeachersVisible", 0);
+        addParam("commentsTeachersVisible", comments);
         addParam("title", title);
         addParam("text", text);
         addParam("groups", "");

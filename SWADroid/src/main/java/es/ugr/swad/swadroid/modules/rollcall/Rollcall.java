@@ -437,6 +437,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         long endTime = adapter.getEndTime();
         String title = ((TextView) layoutView.findViewById(R.id.toptext)).getText().toString();
         String text = adapter.getText();
+        int comments = adapter.getCommentsVisible();
 
         Intent intent = new Intent (Rollcall.this, VisibilityEvent.class);
         intent.putExtra("eventCode", eventCode);
@@ -445,6 +446,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         intent.putExtra("endTime", endTime);
         intent.putExtra("title", title);
         intent.putExtra("text", text);
+        intent.putExtra("commentsVisible", comments);
 
         startActivityForResult(intent, Constants.VISIBILITY_EVENT_REQUEST_CODE);
     }
@@ -468,6 +470,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         long endTime = adapter.getEndTime();
         String title = ((TextView) layoutView.findViewById(R.id.toptext)).getText().toString();
         String text = adapter.getText();
+        int comments = adapter.getCommentsVisible();
 
         Intent intent = new Intent (Rollcall.this, VisibilityEvent.class);
         intent.putExtra("eventCode", eventCode);
@@ -476,6 +479,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         intent.putExtra("endTime", endTime);
         intent.putExtra("title", title);
         intent.putExtra("text", text);
+        intent.putExtra("commentsVisible", comments);
 
         startActivityForResult(intent, Constants.VISIBILITY_EVENT_REQUEST_CODE);
     }
@@ -488,7 +492,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
     }
 
     private void openEventForm(String titleForm, int eventCode, String title) {
-        try {
+        if(eventCode != 0) {
             int hidden = adapter.getHidden();
             long startTime = adapter.getStartTime();
             long endTime = adapter.getEndTime();
@@ -503,7 +507,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
             SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
             SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
 
-            Intent intent = new Intent (Rollcall.this, EventForm.class);
+            Intent intent = new Intent(Rollcall.this, EventForm.class);
             intent.putExtra("titleEventForm", titleForm);
             intent.putExtra("attendanceEventCode", eventCode);
             intent.putExtra("hidden", hidden);
@@ -515,9 +519,12 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
             intent.putExtra("text", text);
             intent.putExtra("commentsVisible", comments);
             startActivityForResult(intent, Constants.EVENT_FORM_REQUEST_CODE);
-        } catch (Exception e) {
-            String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(errorMsg, e, true);
+        }
+        else{
+            Intent intent = new Intent(Rollcall.this, EventForm.class);
+            intent.putExtra("titleEventForm", titleForm);
+            intent.putExtra("attendanceEventCode", 0);
+            startActivityForResult(intent, Constants.EVENT_FORM_REQUEST_CODE);
         }
     }
 }

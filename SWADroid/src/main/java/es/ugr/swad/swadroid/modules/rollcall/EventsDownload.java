@@ -107,26 +107,14 @@ public class EventsDownload extends Module {
             for (int i = 0; i < numEvents; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
                 long attendanceEventCode = Long.parseLong(pii.getProperty("attendanceEventCode").toString());
-                boolean hidden;
-                if(pii.getProperty("hidden").toString().equals("1"))
-                    hidden = true;
-                else
-                    hidden = false;
-
+                boolean hidden = Utils.parseIntBool(Integer.parseInt(pii.getProperty("hidden").toString()));
                 String userSurname1 = pii.getProperty("userSurname1").toString();
                 String userSurname2 = pii.getProperty("userSurname2").toString();
                 String userFirstName = pii.getProperty("userFirstname").toString();
                 String userPhoto = pii.getProperty("userPhoto").toString();
                 int startTime = Integer.parseInt(pii.getProperty("startTime").toString());
                 int endTime = Integer.parseInt(pii.getProperty("endTime").toString());
-
-                //boolean commentsTeachersVisible = Utils.parseStringBool(pii.getProperty("commentsTeachersVisible").toString());
-                boolean commentsTeachersVisible;
-                if(pii.getProperty("commentsTeachersVisible").toString().equals("1"))
-                    commentsTeachersVisible = true;
-                else
-                    commentsTeachersVisible = false;
-
+                boolean commentsTeachersVisible = Utils.parseIntBool(Integer.parseInt(pii.getProperty("commentsTeachersVisible").toString()));
                 String title = pii.getProperty("title").toString();
                 String text = pii.getProperty("text").toString();
                 String groups = (pii.hasProperty("groups")? pii.getProperty("groups").toString() : "");

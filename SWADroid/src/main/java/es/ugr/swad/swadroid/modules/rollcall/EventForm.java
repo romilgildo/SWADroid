@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import es.ugr.swad.swadroid.model.Event;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
+import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
@@ -78,9 +80,7 @@ public class EventForm extends Module {
         attendanceEventCode = getIntent().getIntExtra("attendanceEventCode", 0); //0 is new event
 
         titleEditText = (EditText) findViewById(R.id.name_text);
-        titleEditText.setText(getIntent().getStringExtra("title"));
         descriptionEditText = (EditText) findViewById(R.id.description_text);
-        descriptionEditText.setText(getIntent().getStringExtra("text"));
         initialDateEditText = (EditText) findViewById(R.id.initialDateText);
         initialTimeEditText = (EditText) findViewById(R.id.initialTimeText);
         finalDateEditText = (EditText) findViewById(R.id.finalDateText);
@@ -91,10 +91,15 @@ public class EventForm extends Module {
         hideCommentsCheckbox = (CheckBox) findViewById(R.id.check_hideComments);
 
         if(attendanceEventCode != 0){
+            titleEditText.setText(getIntent().getStringExtra("title"));
+            descriptionEditText.setText(getIntent().getStringExtra("text"));
             initialDateEditText.setText(getIntent().getStringExtra("startDate"));
             initialTimeEditText.setText(getIntent().getStringExtra("startTime"));
             finalDateEditText.setText(getIntent().getStringExtra("endDate"));
             finalTimeEditText.setText(getIntent().getStringExtra("endTime"));
+
+            hidden = getIntent().getIntExtra("hidden", 0);
+            comments = getIntent().getIntExtra("commentsVisible", 0);
 
         }else{ //new event
             Calendar startTimeCalendar = Calendar.getInstance();
@@ -115,9 +120,6 @@ public class EventForm extends Module {
             finalDateEditText.setText(endDate);
             finalTimeEditText.setText(endTime);
         }
-
-        hidden = getIntent().getIntExtra("hidden", 0);
-        comments = getIntent().getIntExtra("commentsVisible", 0);
 
         setMETHOD_NAME("sendAttendanceEvent");
     }
@@ -249,6 +251,13 @@ public class EventForm extends Module {
             hideCommentsCheckbox.setChecked(Boolean.FALSE);
         hideCommentsTitle.setText(getResources().getString(R.string.hideComments));
 
+        hideCommentsCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                comments = Utils.parseBoolInt(!isChecked);
+            }
+        });
+
         allGroupsCheckbox.setChecked(Boolean.TRUE);
         String text = getResources().getString(R.string.allGroups).toString().replace("##subjectName##", Courses.getSelectedCourseShortName());
         allGroupsTitle.setText(text);
@@ -291,7 +300,7 @@ public class EventForm extends Module {
         addParam("hidden", hidden); //visible event
         addParam("startTime", startUnixTime);
         addParam("endTime", endUnixTime);
-        addParam("commentsTeachersVisible", 0);
+        addParam("commentsTeachersVisible", comments);
         addParam("title", titleEditText.getText().toString());
         addParam("text", descriptionEditText.getText().toString());
         addParam("groups", "");
