@@ -297,7 +297,7 @@ public class EventForm extends Module {
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("attendanceEventCode", attendanceEventCode);
         addParam("courseCode", Courses.getSelectedCourseCode());
-        addParam("hidden", hidden); //visible event
+        addParam("hidden", hidden);
         addParam("startTime", startUnixTime);
         addParam("endTime", endUnixTime);
         addParam("commentsTeachersVisible", comments);

@@ -365,4 +365,5 @@
     <string name="eventEdited">Event edited</string>
     <string name="allGroups">All the ##subjectName## subject</string>
     <string name="hideComments">Hide comments of teachers</string>
+    <string name="selectGroupsButton">Select groups</string>
 </resources>

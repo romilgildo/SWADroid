@@ -349,4 +349,5 @@
     <string name="eventEdited">Evento editado</string>
     <string name="allGroups">Toda la asignatura ##subjectName##</string>
     <string name="hideComments">Ocultar comentarios de profesores</string>
+    <string name="selectGroupsButton">Seleccionar grupos</string>
 </resources>

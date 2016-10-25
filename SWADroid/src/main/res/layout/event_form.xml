@@ -7,160 +7,178 @@
 
     <include layout="@layout/progress_screen" />
 
-    <LinearLayout
-        android:id="@+id/event_from"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="5dp"
-        android:orientation="vertical" >
-
-        <TextView android:id="@+id/name_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/titleEvent"
-            android:textColor="@color/foreground1"
-            android:textSize="19sp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="4dp"/>
-
-        <EditText
-            android:id="@+id/name_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/foreground1" />
-
-        <TextView android:id="@+id/description_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/descriptionEvent"
-            android:textColor="@color/foreground1"
-            android:textSize="19sp"
-            android:layout_marginLeft="5dp" />
-
-        <EditText
-            android:id="@+id/description_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/foreground1" />
+    <ScrollView
+        android:id="@+id/create_account_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/event_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="5dp"
-            android:orientation="horizontal" >
+            android:orientation="vertical" >
 
-            <TableLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:stretchColumns="0,1">
-                <TableRow>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/initialDate"
-                        android:textColor="@color/foreground1"
-                        android:textSize="19sp"
-                        android:layout_marginLeft="5dp"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/timeEvent"
-                        android:textColor="@color/foreground1"
-                        android:textSize="19sp"
-                        android:layout_marginLeft="5dp" />
-                </TableRow>
-                <TableRow>
-                    <EditText
-                        android:id="@+id/initialDateText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/foreground1" />
-                    <EditText
-                        android:id="@+id/initialTimeText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/foreground1" />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/finalDate"
-                        android:textColor="@color/foreground1"
-                        android:textSize="19sp"
-                        android:layout_marginLeft="5dp" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/timeEvent"
-                        android:textColor="@color/foreground1"
-                        android:textSize="19sp"
-                        android:layout_marginLeft="5dp" />
-                </TableRow>
-                <TableRow>
-                    <EditText
-                        android:id="@+id/finalDateText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/foreground1"/>
-                    <EditText
-                        android:id="@+id/finalTimeText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/foreground1"/>
-                </TableRow>
-            </TableLayout>
-        </LinearLayout>
+            <TextView android:id="@+id/name_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/titleEvent"
+                android:textColor="@color/foreground1"
+                android:textSize="19sp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="4dp"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal" >
+            <EditText
+                android:id="@+id/name_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/foreground1" />
 
-            <CheckBox
-                android:id="@+id/check_hideComments"
+            <TextView android:id="@+id/description_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/descriptionEvent"
+                android:textColor="@color/foreground1"
+                android:textSize="19sp"
+                android:layout_marginLeft="5dp" />
+
+            <EditText
+                android:id="@+id/description_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/foreground1" />
+
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal" >
 
-            <TextView android:id="@+id/text_hideComments"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:hint="@string/hideComments"
-                      android:textColor="@color/foreground1"
-                      android:textSize="19sp"
-                      android:layout_marginLeft="5dp"
-                      android:layout_marginTop="4dp"/>
-        </LinearLayout>
+                <TableLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:stretchColumns="0,1">
+                    <TableRow>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/initialDate"
+                            android:textColor="@color/foreground1"
+                            android:textSize="19sp"
+                            android:layout_marginLeft="5dp"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/timeEvent"
+                            android:textColor="@color/foreground1"
+                            android:textSize="19sp"
+                            android:layout_marginLeft="5dp" />
+                    </TableRow>
+                    <TableRow>
+                        <EditText
+                            android:id="@+id/initialDateText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/foreground1" />
+                        <EditText
+                            android:id="@+id/initialTimeText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/foreground1" />
+                    </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/finalDate"
+                            android:textColor="@color/foreground1"
+                            android:textSize="19sp"
+                            android:layout_marginLeft="5dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/timeEvent"
+                            android:textColor="@color/foreground1"
+                            android:textSize="19sp"
+                            android:layout_marginLeft="5dp" />
+                    </TableRow>
+                    <TableRow>
+                        <EditText
+                            android:id="@+id/finalDateText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/foreground1"/>
+                        <EditText
+                            android:id="@+id/finalTimeText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/foreground1"/>
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal" >
-
-            <CheckBox
-                android:id="@+id/check_allGroups"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal" >
 
-            <TextView android:id="@+id/text_allGroups"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:hint="@string/allGroups"
-                      android:textColor="@color/foreground1"
-                      android:textSize="19sp"
-                      android:layout_marginLeft="5dp"
-                      android:layout_marginTop="4dp"/>
+                <CheckBox
+                    android:id="@+id/check_hideComments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView android:id="@+id/text_hideComments"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:hint="@string/hideComments"
+                          android:textColor="@color/foreground1"
+                          android:textSize="19sp"
+                          android:layout_marginLeft="5dp"
+                          android:layout_marginTop="4dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal" >
+
+                <CheckBox
+                    android:id="@+id/check_allGroups"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView android:id="@+id/text_allGroups"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:hint="@string/allGroups"
+                          android:textColor="@color/foreground1"
+                          android:textSize="19sp"
+                          android:layout_marginLeft="5dp"
+                          android:layout_marginTop="4dp"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/groups_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="32dip"
+                android:paddingRight="32dip"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/selectGroupsButton"
+                android:textColor="@color/white"
+                android:background="@color/button_background_blue"
+                android:layout_marginTop="25dip" />
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
