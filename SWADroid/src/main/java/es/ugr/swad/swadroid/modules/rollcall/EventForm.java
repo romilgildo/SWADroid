@@ -287,7 +287,7 @@ public class EventForm extends Module {
     protected void requestService() throws Exception {
         createRequest(SOAPClient.CLIENT_TYPE);
 
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yy hh:mm");
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yy HH:mm");
         Date initialDate = formatter.parse(initialDateEditText.getText().toString() + " " + initialTimeEditText.getText().toString());
         Date finalDate = formatter.parse(finalDateEditText.getText().toString() + " " + finalTimeEditText.getText().toString());
 
