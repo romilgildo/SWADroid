@@ -438,6 +438,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         String title = ((TextView) layoutView.findViewById(R.id.toptext)).getText().toString();
         String text = adapter.getText();
         int comments = adapter.getCommentsVisible();
+        String groups = adapter.getGroups();
 
         Intent intent = new Intent (Rollcall.this, VisibilityEvent.class);
         intent.putExtra("eventCode", eventCode);
@@ -447,6 +448,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         intent.putExtra("title", title);
         intent.putExtra("text", text);
         intent.putExtra("commentsVisible", comments);
+        intent.putExtra("groups", groups);
 
         startActivityForResult(intent, Constants.VISIBILITY_EVENT_REQUEST_CODE);
     }
@@ -471,6 +473,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         String title = ((TextView) layoutView.findViewById(R.id.toptext)).getText().toString();
         String text = adapter.getText();
         int comments = adapter.getCommentsVisible();
+        String groups = adapter.getGroups();
 
         Intent intent = new Intent (Rollcall.this, VisibilityEvent.class);
         intent.putExtra("eventCode", eventCode);
@@ -480,6 +483,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
         intent.putExtra("title", title);
         intent.putExtra("text", text);
         intent.putExtra("commentsVisible", comments);
+        intent.putExtra("groups", groups);
 
         startActivityForResult(intent, Constants.VISIBILITY_EVENT_REQUEST_CODE);
     }
@@ -498,6 +502,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
             long endTime = adapter.getEndTime();
             String text = adapter.getText();
             int comments = adapter.getCommentsVisible();
+            String groups = adapter.getGroups();
 
             Calendar startTimeCalendar = Calendar.getInstance();
             startTimeCalendar.setTimeInMillis(startTime * 1000L);
@@ -518,6 +523,7 @@ public class Rollcall extends MenuExpandableListActivity implements SwipeRefresh
             intent.putExtra("title", title);
             intent.putExtra("text", text);
             intent.putExtra("commentsVisible", comments);
+            intent.putExtra("groups", groups);
             startActivityForResult(intent, Constants.EVENT_FORM_REQUEST_CODE);
         }
         else{

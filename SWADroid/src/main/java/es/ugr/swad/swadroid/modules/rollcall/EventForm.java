@@ -1,5 +1,6 @@
 package es.ugr.swad.swadroid.modules.rollcall;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -34,6 +36,8 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Event;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.courses.Courses;
+import es.ugr.swad.swadroid.modules.groups.Groups;
+import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
@@ -56,10 +60,12 @@ public class EventForm extends Module {
     CheckBox allGroupsCheckbox;
     TextView hideCommentsTitle;
     CheckBox hideCommentsCheckbox;
+    Button selectGroupsButton;
 
     int attendanceEventCode;
     int hidden;
     int comments;
+    String groups;
 
     int minute;
     int hour;
@@ -89,6 +95,9 @@ public class EventForm extends Module {
         allGroupsCheckbox = (CheckBox) findViewById(R.id.check_allGroups);
         hideCommentsTitle = (TextView) findViewById(R.id.text_hideComments);
         hideCommentsCheckbox = (CheckBox) findViewById(R.id.check_hideComments);
+        selectGroupsButton = (Button) findViewById(R.id.groups_button);
+
+        groups = "";
 
         if(attendanceEventCode != 0){
             titleEditText.setText(getIntent().getStringExtra("title"));
@@ -100,6 +109,7 @@ public class EventForm extends Module {
 
             hidden = getIntent().getIntExtra("hidden", 0);
             comments = getIntent().getIntExtra("commentsVisible", 0);
+            groups = getIntent().getStringExtra("groups");
 
         }else{ //new event
             Calendar startTimeCalendar = Calendar.getInstance();
@@ -258,9 +268,30 @@ public class EventForm extends Module {
             }
         });
 
-        allGroupsCheckbox.setChecked(Boolean.TRUE);
+        if(groups == "")
+            allGroupsCheckbox.setChecked(Boolean.TRUE);
+        else
+            allGroupsCheckbox.setChecked(Boolean.FALSE);
         String text = getResources().getString(R.string.allGroups).toString().replace("##subjectName##", Courses.getSelectedCourseShortName());
         allGroupsTitle.setText(text);
+
+        allGroupsCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                    selectGroupsButton.setVisibility(View.GONE);
+                else
+                    selectGroupsButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        selectGroupsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent activity = new Intent(EventForm.this, SelectGroups.class);
+                activity.putExtra("courseCode", Courses.getSelectedCourseCode());
+                startActivityForResult(activity, Constants.ROLLCALL_SELECT_GROUPS_REQUEST_CODE);
+            }
+        });
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -279,6 +310,18 @@ public class EventForm extends Module {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case Constants.ROLLCALL_SELECT_GROUPS_REQUEST_CODE:
+                    groups = intent.getStringExtra("groups");
+                    break;
+            }
         }
     }
 
@@ -303,7 +346,7 @@ public class EventForm extends Module {
         addParam("commentsTeachersVisible", comments);
         addParam("title", titleEditText.getText().toString());
         addParam("text", descriptionEditText.getText().toString());
-        addParam("groups", "");
+        addParam("groups", groups);
         sendRequest(Event.class, true);
 
         if (result != null) {

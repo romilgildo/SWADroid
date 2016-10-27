@@ -440,6 +440,7 @@ public class DataBaseHelper {
                         crypto.decrypt(ent.getString("text")),
                         crypto.decrypt(ent.getString("groups")),
                         crypto.decrypt(ent.getString("status")));
+                Log.d(TAG, crypto.decrypt(ent.getString("groups")));
                 break;
             case DataBaseHelper.DB_TABLE_GROUPS:
                 long groupTypeCode = getGroupTypeCodeFromGroup(ent.getLong("id"));

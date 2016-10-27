@@ -177,7 +177,8 @@
                 android:text="@string/selectGroupsButton"
                 android:textColor="@color/white"
                 android:background="@color/button_background_blue"
-                android:layout_marginTop="25dip" />
+                android:layout_marginTop="25dip"
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
 

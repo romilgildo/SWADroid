@@ -85,6 +85,15 @@
                 android:value="es.ugr.swad.swadroid.modules.rollcall.Rollcall" />
         </activity>
         <activity
+            android:name="es.ugr.swad.swadroid.modules.rollcall.SelectGroups"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.rollcall.EventForm" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.rollcall.EventForm" />
+        </activity>
+        <activity
             android:name="es.ugr.swad.swadroid.modules.rollcall.RemoveEvent"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Translucent"

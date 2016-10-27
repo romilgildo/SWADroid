@@ -249,4 +249,8 @@ public class EventsCursorAdapter extends CursorAdapter {
         return crypto.decrypt(cursor.getString(cursor.getColumnIndex("text")));
     }
 
+    public String getGroups() {
+        return cursor.getString(cursor.getColumnIndex("groups"));
+    }
+
 }
