@@ -250,7 +250,8 @@ public class EventsCursorAdapter extends CursorAdapter {
     }
 
     public String getGroups() {
-        return cursor.getString(cursor.getColumnIndex("groups"));
+        String groups = cursor.getString(cursor.getColumnIndex("groups"));
+        return groups;
     }
 
 }

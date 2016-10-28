@@ -268,10 +268,14 @@ public class EventForm extends Module {
             }
         });
 
-        if(groups == "")
+        if(groups.isEmpty()) {
             allGroupsCheckbox.setChecked(Boolean.TRUE);
-        else
+            selectGroupsButton.setVisibility(View.GONE);
+        }else {
             allGroupsCheckbox.setChecked(Boolean.FALSE);
+            selectGroupsButton.setVisibility(View.VISIBLE);
+        }
+
         String text = getResources().getString(R.string.allGroups).toString().replace("##subjectName##", Courses.getSelectedCourseShortName());
         allGroupsTitle.setText(text);
 
