@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.util.LongSparseArray;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +34,7 @@ public class SelectGroups extends MenuExpandableListActivity {
     /**
      * Tests tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + " Groups Events";
+    private static final String TAG = Constants.APP_TAG + " SelectGroups";
 
     /**
      * Course code of current selected course
@@ -127,19 +128,12 @@ public class SelectGroups extends MenuExpandableListActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.home:
-                Intent backIntent = new Intent();
-                backIntent.putExtra("groups", oldGroups);
-                setResult(RESULT_OK, backIntent);
-                finish();
-
             case R.id.action_refresh:
                 showProgressLoading();
 
                 Intent activity = new Intent(this, GroupTypes.class);
                 activity.putExtra("courseCode", courseCode);
                 startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
-
                 return true;
 
             case R.id.action_save:
@@ -148,12 +142,20 @@ public class SelectGroups extends MenuExpandableListActivity {
                 saveIntent.putExtra("groups", groups);
                 setResult(RESULT_OK, saveIntent);
                 finish();
-
                 return true;
 
             default:
-                return super.onOptionsItemSelected(item);
+                onBackPressed();
+                return true;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent backIntent = new Intent();
+        backIntent.putExtra("groups", oldGroups);
+        setResult(RESULT_OK, backIntent);
+        finish();
     }
 
     @Override
