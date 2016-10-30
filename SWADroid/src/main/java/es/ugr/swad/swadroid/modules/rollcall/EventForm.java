@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -293,9 +295,12 @@ public class EventForm extends Module {
             public void onClick(View v) {
                 Intent activity = new Intent(EventForm.this, SelectGroups.class);
                 activity.putExtra("courseCode", Courses.getSelectedCourseCode());
+                activity.putExtra("groups", groups);
                 startActivityForResult(activity, Constants.ROLLCALL_SELECT_GROUPS_REQUEST_CODE);
             }
         });
+
+        hideSoftKeyboard();
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -425,5 +430,12 @@ public class EventForm extends Module {
     @Override
     public void onBackPressed() {
         showCancelDialog();
+    }
+
+    //hide keyboard when activity starts
+    public void hideSoftKeyboard() {
+        if(getCurrentFocus()!=null) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        }
     }
 }

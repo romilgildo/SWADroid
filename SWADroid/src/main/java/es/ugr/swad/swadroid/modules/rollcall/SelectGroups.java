@@ -64,11 +64,14 @@ public class SelectGroups extends MenuExpandableListActivity {
 
     private boolean refreshRequested = false;
 
+    private String oldGroups = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         courseCode = getIntent().getLongExtra("courseCode", -1);
+        oldGroups = getIntent().getStringExtra("groups");
 
         setContentView(R.layout.group_choice);
 
@@ -124,6 +127,12 @@ public class SelectGroups extends MenuExpandableListActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.home:
+                Intent backIntent = new Intent();
+                backIntent.putExtra("groups", oldGroups);
+                setResult(RESULT_OK, backIntent);
+                finish();
+
             case R.id.action_refresh:
                 showProgressLoading();
 
@@ -135,9 +144,9 @@ public class SelectGroups extends MenuExpandableListActivity {
 
             case R.id.action_save:
                 String groups = ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).getChosenGroupCodesAsString();
-                Intent intent = new Intent();
-                intent.putExtra("groups", groups);
-                setResult(RESULT_OK, intent);
+                Intent saveIntent = new Intent();
+                saveIntent.putExtra("groups", groups);
+                setResult(RESULT_OK, saveIntent);
                 finish();
 
                 return true;
