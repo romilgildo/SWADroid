@@ -1,7 +1,6 @@
 package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import org.ksoap2.serialization.SoapPrimitive;
 

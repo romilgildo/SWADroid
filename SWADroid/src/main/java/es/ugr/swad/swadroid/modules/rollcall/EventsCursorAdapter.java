@@ -25,19 +25,14 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
@@ -57,7 +52,7 @@ public class EventsCursorAdapter extends CursorAdapter {
     private LayoutInflater inflater;
 
     private static Typeface iconFont;
-    private static final String TAG = Constants.APP_TAG + " EventsAdapter";
+    private static final String TAG = Constants.APP_TAG + " EventsCursorAdapter";
 
     private static class ViewHolder {
         TextView iconTextView;
@@ -230,15 +225,11 @@ public class EventsCursorAdapter extends CursorAdapter {
     }
 
     public long getStartTime() {
-        long startTime = cursor.getLong(cursor.getColumnIndex("startTime"));
-
-        return startTime;
+        return cursor.getLong(cursor.getColumnIndex("startTime"));
     }
 
     public long getEndTime() {
-        long endTime = cursor.getLong(cursor.getColumnIndex("endTime"));
-
-        return endTime;
+        return cursor.getLong(cursor.getColumnIndex("endTime"));
     }
 
     public int getCommentsVisible() {
@@ -250,8 +241,7 @@ public class EventsCursorAdapter extends CursorAdapter {
     }
 
     public String getGroups() {
-        String groups = cursor.getString(cursor.getColumnIndex("groups"));
-        return groups;
+        return cursor.getString(cursor.getColumnIndex("groups"));
     }
 
 }

@@ -244,9 +244,9 @@ public class Constants {
      */
     public static final int VISIBILITY_EVENT_REQUEST_CODE = 43;
     /**
-     * Request code for Rollcall Select Groups.
+     * Request code for select groups in events.
      */
-    public static final int ROLLCALL_SELECT_GROUPS_REQUEST_CODE = 44;
+    public static final int SELECT_GROUPS_REQUEST_CODE = 44;
     /**
      * Request code for CAMERA permission
      */

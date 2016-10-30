@@ -485,7 +485,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         boolean selected;
         String nickname;
         for(int i=0; i<numFrequents; i++){
-            frequentUsers.getUsers().get(i).setCheckbox(false);
+            frequentUsers.getUsers().get(i).setCheckbox(false); //first all false
             for(int j=0; j<arrayReceivers.size(); j++){
                 nickname = frequentUsers.getUsers().get(i).getUserNickname();
                 selected = arrayReceivers.get(j).getUserNickname().equals(nickname);

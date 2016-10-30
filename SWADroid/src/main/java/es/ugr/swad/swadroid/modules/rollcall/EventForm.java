@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,12 +13,10 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -28,18 +25,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import org.ksoap2.serialization.SoapObject;
 import java.text.ParseException;
 import java.util.Date;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Event;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.courses.Courses;
-import es.ugr.swad.swadroid.modules.groups.Groups;
-import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
@@ -117,16 +110,16 @@ public class EventForm extends Module {
             Calendar startTimeCalendar = Calendar.getInstance();
             startTimeCalendar.setTimeInMillis(System.currentTimeMillis());
             Calendar endTimeCalendar = Calendar.getInstance();
-            endTimeCalendar.setTimeInMillis(System.currentTimeMillis() + 7200 * 1000L);
+            endTimeCalendar.setTimeInMillis(System.currentTimeMillis() + 7200 * 1000L); //two hours later
 
             SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
 
             String startDate = formatDate.format(startTimeCalendar.getTime());
             String startTime = formatTime.format(startTimeCalendar.getTime());
-            //two hours later
             String endDate = formatDate.format(endTimeCalendar.getTime());
             String endTime = formatTime.format(endTimeCalendar.getTime());
+
             initialDateEditText.setText(startDate);
             initialTimeEditText.setText(startTime);
             finalDateEditText.setText(endDate);
@@ -296,10 +289,11 @@ public class EventForm extends Module {
                 Intent activity = new Intent(EventForm.this, SelectGroups.class);
                 activity.putExtra("courseCode", Courses.getSelectedCourseCode());
                 activity.putExtra("groups", groups);
-                startActivityForResult(activity, Constants.ROLLCALL_SELECT_GROUPS_REQUEST_CODE);
+                startActivityForResult(activity, Constants.SELECT_GROUPS_REQUEST_CODE);
             }
         });
 
+        //hide keyboard when activity starts
         hideSoftKeyboard();
 
         return super.onCreateOptionsMenu(menu);
@@ -327,7 +321,7 @@ public class EventForm extends Module {
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case Constants.ROLLCALL_SELECT_GROUPS_REQUEST_CODE:
+                case Constants.SELECT_GROUPS_REQUEST_CODE:
                     groups = intent.getStringExtra("groups");
                     break;
             }
@@ -432,7 +426,6 @@ public class EventForm extends Module {
         showCancelDialog();
     }
 
-    //hide keyboard when activity starts
     public void hideSoftKeyboard() {
         if(getCurrentFocus()!=null) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
